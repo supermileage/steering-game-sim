@@ -1,13 +1,13 @@
 #include "VirtualDisplayTFT.h"
 
-VirtualDisplayTFT::VirtualDisplayTFT(int width, int height) : _width(width), _height(height) { }
+VirtualDisplayTFT::VirtualDisplayTFT(sf::Window* window) : _window(window) { }
 
 int VirtualDisplayTFT::width() {
-    return _width;
+    return (int)_window->getSize().x;
 }
 
 int VirtualDisplayTFT::height() {
-    return _height;
+    return (int)_window->getSize().y;
 }
 
 void VirtualDisplayTFT::pixel(int x, int y, int colour) {

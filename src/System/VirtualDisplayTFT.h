@@ -55,7 +55,7 @@
 class VirtualDisplayTFT
 {
     public:
-        VirtualDisplayTFT(int width, int height);
+        VirtualDisplayTFT(sf::Window* window);
 
         /** Get the width of the window in pixel
          *
@@ -193,8 +193,7 @@ class VirtualDisplayTFT
 
     private:
         unsigned char *font;
-        int _width;
-        int _height;
+        sf::Window* _window;
         uint16_t _background;
 };
 

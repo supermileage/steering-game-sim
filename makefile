@@ -1,6 +1,6 @@
 CC = g++
 CXXFLAGS = -std=c++17
-LIB := -lsfml-window -lsfml-graphics
+LIB := -lsfml-window -lsfml-graphics -lsfml-system
 SRC_DIR = src
 LIB_DIR = lib
 DEP_DIR = dep
@@ -23,11 +23,11 @@ $(DEP_DIR)/%.d:
 $(BUILD_DIR)/%.o: %.cpp $(DEP_DIR)/%.d
 	@echo ' *** compiling $< *** '
 	@mkdir -p $(@D)
-	@$(CC) $(CXXFLAGS) $(DEPFLAGS) -c -o $@ $< $(INCLUDE_FLAGS)
+	@$(CC) $(CXXFLAGS) -g $(DEPFLAGS) -c -o $@ $< $(INCLUDE_FLAGS)
 
 game: $(OBJ)
 	@echo ' *** Building $@ *** '
-	@$(CC) $(CXXFLAGS) -o $@ $^ $(LIB) $(INCLUDE_FLAGS)
+	@$(CC) $(CXXFLAGS) -g -o $@ $^ $(LIB) $(INCLUDE_FLAGS)
 
 clean:
 	@rm -r $(OBJ) $(DEPENDENCIES) game
