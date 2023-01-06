@@ -1,6 +1,6 @@
 #include "VirtualDisplayTFT.h"
 
-VirtualDisplayTFT::VirtualDisplayTFT(sf::Window* window) : _window(window) { }
+VirtualDisplayTFT::VirtualDisplayTFT(sf::RenderWindow* window) : _window(window) { }
 
 int VirtualDisplayTFT::width() {
     return (int)_window->getSize().x;
@@ -8,6 +8,25 @@ int VirtualDisplayTFT::width() {
 
 int VirtualDisplayTFT::height() {
     return (int)_window->getSize().y;
+}
+
+void VirtualDisplayTFT::registerShape(Graphic* shape, VirtualDisplayTFT::GraphicType type) {
+    switch (type) {
+        case VirtualDisplayTFT::Circle:
+            _graphicsMap[shape] = new sf::CircleShape();
+            break;
+        case VirtualDisplayTFT::Rectangle:
+            _graphicsMap[shape] = new sf::RectangleShape();
+            break;
+        case VirtualDisplayTFT::BitmapData:
+            _graphicsMap[shape] = new sf::Sprite();
+            break;
+        case VirtualDisplayTFT::Text:
+            _graphicsMap[shape] = new sf::Text();
+            break;
+        default:
+            break;
+    }
 }
 
 void VirtualDisplayTFT::pixel(int x, int y, int colour) {
@@ -19,7 +38,12 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour) {
 }
 
 void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour) {
-
+    sf::CircleShape testCircle;
+    testCircle.setRadius(r);
+    testCircle.setPosition(x, y);
+    testCircle.setFillColor(sf::Color::White);
+    _window->draw(testCircle);
+    _window->display();
 }
 
 void VirtualDisplayTFT::line(int x0, int y0, int x1, int y1, int colour) {
@@ -43,7 +67,7 @@ void VirtualDisplayTFT::background(uint16_t colour) {
 }
 
 void VirtualDisplayTFT::cls(void) {
-
+    _window->clear();
 }
 
 int VirtualDisplayTFT::_putc(int value) {

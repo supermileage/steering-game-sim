@@ -2,13 +2,14 @@
 #define _SHAPE_H_
 
 #include "SPI_TFT_ILI9341.h"
+#include "Graphic.h"
 
-class Shape {
+class Shape : public Graphic {
 	public:
-		virtual ~Shape() { }
-		void init(SPI_TFT_ILI9341* tft, int32_t xpos, int32_t ypos, int32_t colour, int32_t background = Black);
+		void init(SPI_TFT_ILI9341* tft, int32_t xpos, int32_t ypos, int32_t colour, int32_t background = BlackTFT);
 		void setColour(int32_t value);
 		int32_t getColour();
+		void setPosition(int32_t xpos, int32_t ypos);
 		virtual void draw() = 0;
 		virtual void clear() = 0;
 		

@@ -18,15 +18,21 @@ Game::~Game() {
 
 void Game::init() {
     _timer->start();
-    _tft->background(Black);
+    _tft->background(BlackTFT);
     _tft->cls();
 
-    /* Initialize any game objects here */
+    // Initialize any game objects with their start positions here.  Assume that _tft->width()
+    // and _tft->height() may vary, so try to avoid using hard-coded positions (ie. you should able
+    // to play your game on different-sized screens / windows)
+
+    // example code:
+    _ball = new Circle();
+    _ball->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, 20, true);
+    _ball->draw();
 }
 
 int Game::run() {
     while (_run) {
-        int64_t currentTime = _millis();
         _inputManager->run();
 
         Vec2 curJoystickPos = _inputManager->currentJoystickPos();
@@ -43,6 +49,7 @@ int Game::run() {
 
 void Game::_loop() {
     /* Game loop */
+    int64_t currentTime = _millis();
 }
 
 void Game::_handleJoystickChanged(Vec2 pos) {

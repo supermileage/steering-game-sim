@@ -25,7 +25,7 @@ class Game {
         Vec2 _lastJoystickPos = { 0, 0 };
         bool _run = true;
         /* Declare any game objects here */
-        // Circle* _ball;
+        Circle* _ball; // example object
 
         void _loop();
         void _handleJoystickChanged(Vec2 pos);

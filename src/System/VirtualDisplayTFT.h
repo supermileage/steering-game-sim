@@ -2,31 +2,33 @@
 #define _VIRTUAL_DISPLAY_TFT_H_
 
 #include <stdint.h>
+#include <unordered_map>
 
-#include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+
+#include "Graphic.h"
 
 #define RGB(r, g, b) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3)) // 5 red | 6 green | 5 blue
 
 /* some RGB color definitions                                                 */
-#define Black 0x0000       /*   0,   0,   0 */
-#define Navy 0x000F        /*   0,   0, 128 */
-#define DarkGreen 0x03E0   /*   0, 128,   0 */
-#define DarkCyan 0x03EF    /*   0, 128, 128 */
-#define Maroon 0x7800      /* 128,   0,   0 */
-#define Purple 0x780F      /* 128,   0, 128 */
-#define Olive 0x7BE0       /* 128, 128,   0 */
-#define LightGrey 0xC618   /* 192, 192, 192 */
-#define DarkGrey 0x7BEF    /* 128, 128, 128 */
-#define Blue 0x001F        /*   0,   0, 255 */
-#define Green 0x07E0       /*   0, 255,   0 */
-#define Cyan 0x07FF        /*   0, 255, 255 */
-#define Red 0xF800         /* 255,   0,   0 */
-#define Magenta 0xF81F     /* 255,   0, 255 */
-#define Yellow 0xFFE0      /* 255, 255,   0 */
-#define White 0xFFFF       /* 255, 255, 255 */
-#define Orange 0xFD20      /* 255, 165,   0 */
-#define GreenYellow 0xAFE5 /* 173, 255,  47 */
+#define BlackTFT 0x0000       /*   0,   0,   0 */
+#define NavyTFT 0x000F        /*   0,   0, 128 */
+#define DarkGreenTFT 0x03E0   /*   0, 128,   0 */
+#define DarkCyanTFT 0x03EF    /*   0, 128, 128 */
+#define MaroonTFT 0x7800      /* 128,   0,   0 */
+#define PurpleTFT 0x780F      /* 128,   0, 128 */
+#define OliveTFT 0x7BE0       /* 128, 128,   0 */
+#define LightGreyTFT 0xC618   /* 192, 192, 192 */
+#define DarkGreyTFT 0x7BEF    /* 128, 128, 128 */
+#define BlueTFT 0x001F        /*   0,   0, 255 */
+#define GreenTFT 0x07E0       /*   0, 255,   0 */
+#define CyanTFT 0x07FF        /*   0, 255, 255 */
+#define RedTFT 0xF800         /* 255,   0,   0 */
+#define MagentaTFT 0xF81F     /* 255,   0, 255 */
+#define YellowTFT 0xFFE0      /* 255, 255,   0 */
+#define WhiteTFT 0xFFFF       /* 255, 255, 255 */
+#define OrangeTFT 0xFD20      /* 255, 165,   0 */
+#define GreenYellowTFT 0xAFE5 /* 173, 255,  47 */
 
 /** Display control class which implements graphics-related methods for mbed's SPI_TFT
  *
@@ -39,7 +41,7 @@
  *
  * int main() {
  *     VirtualDisplayTFT TFT(200, 200); 
- *     TFT.background(Black);    // set background to black
+ *     TFT.background(BlackTFT);    // set background to black
  *     TFT.foreground(White);    // set chars to white
  *     TFT.cls();                // clear the window
  *     TFT.set_font((unsigned char*) Arial12x12);  // select the font
@@ -55,7 +57,10 @@
 class VirtualDisplayTFT
 {
     public:
-        VirtualDisplayTFT(sf::Window* window);
+        /* Not included in */
+        enum GraphicType { Circle, Rectangle, BitmapData, Text };
+
+        VirtualDisplayTFT(sf::RenderWindow* window);
 
         /** Get the width of the window in pixel
          *
@@ -190,11 +195,15 @@ class VirtualDisplayTFT
          *
          */
         void set_orientation(unsigned int o);
+        
+        /* Not included in firmware TFT object */
+        void registerShape(Graphic* shape, VirtualDisplayTFT::GraphicType type);
 
     private:
         unsigned char *font;
-        sf::Window* _window;
+        sf::RenderWindow* _window;
         uint16_t _background;
+        std::unordered_map<Graphic*, sf::Drawable*> _graphicsMap;
 };
 
 #endif

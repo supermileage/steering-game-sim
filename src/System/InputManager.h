@@ -1,7 +1,7 @@
 #ifndef _INPUT_MANAGER_H_
 #define _INPUT_MANAGER_H_
 
-#include "SFML/Window.hpp"
+#include "SFML/Graphics.hpp"
 #include "SystemTypes.h"
 #include "Game.h"
 
@@ -9,7 +9,7 @@ class Game;
 
 class InputManager {
     public:
-        InputManager(sf::Window* _window);
+        InputManager(sf::RenderWindow* _window);
         ~InputManager() { }
         void init();
         void run();
@@ -24,7 +24,7 @@ class InputManager {
         Vec2 currentJoystickPos();
 
     private:
-        sf::Window* _window;
+        sf::RenderWindow* _window;
         sf::Event _windowEvent;
         Game* _game;
         Vec2 _currentJoystickPos;
