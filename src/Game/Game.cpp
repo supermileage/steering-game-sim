@@ -27,7 +27,9 @@ void Game::init() {
 
     // example code:
     _ball = new Circle();
-    _ball->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, 20, true);
+    _ball->init(_tft, 0, _tft->height() / 2, WhiteTFT, 20, true);
+    _ball->setDirection(Vec2 { 1, 0 });
+    _ball->setSpeed(15);
     _ball->draw();
 }
 
@@ -41,7 +43,14 @@ int Game::run() {
             _lastJoystickPos = curJoystickPos;
         }
 
-        _loop();
+        int64_t currentTime = _millis();
+            if (currentTime > _lastFrameMillis + FRAME_RATE_MILLIS) {
+                _deltaT = currentTime - _lastFrameMillis;
+                _loop();
+
+                _lastFrameMillis = currentTime;
+            }
+        
     }
 
     return 1;
@@ -49,7 +58,7 @@ int Game::run() {
 
 void Game::_loop() {
     /* Game loop */
-    int64_t currentTime = _millis();
+    _ball->move();
 }
 
 void Game::_handleJoystickChanged(Vec2 pos) {

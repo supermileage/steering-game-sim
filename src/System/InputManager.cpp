@@ -93,30 +93,30 @@ void InputManager::_updateJoystick(sf::Keyboard::Key key, sf::Event::EventType t
     switch (key) {
         case sf::Keyboard::Up:
             if (type == sf::Event::KeyPressed) {
-                _currentJoystickPos.y = -100;
+                _currentJoystickPos.y = -1;
             } else {
-                _currentJoystickPos.y = (_currentJoystickPos.y > 0 ? 100 : 0);
+                _currentJoystickPos.y = (_currentJoystickPos.y > 0 ? 1 : 0);
             }
             break;
         case sf::Keyboard::Down:
             if (type == sf::Event::KeyPressed) {
-                _currentJoystickPos.y = 100;
+                _currentJoystickPos.y = 1;
             } else {
-                _currentJoystickPos.y = (_currentJoystickPos.y < 0 ? -100 : 0);
+                _currentJoystickPos.y = (_currentJoystickPos.y < 0 ? -1 : 0);
             }
             break;
         case sf::Keyboard::Left:
             if (type == sf::Event::KeyPressed) {
-                _currentJoystickPos.x = -100;
+                _currentJoystickPos.x = -1;
             } else {
-                _currentJoystickPos.x = (_currentJoystickPos.x > 0 ? 100 : 0);
+                _currentJoystickPos.x = (_currentJoystickPos.x > 0 ? 1 : 0);
             }
             break;
         case sf::Keyboard::Right:
             if (type == sf::Event::KeyPressed) {
-                _currentJoystickPos.x = 100;
+                _currentJoystickPos.x = 1;
             } else {
-                _currentJoystickPos.x = (_currentJoystickPos.x < 0 ? -100 : 0);
+                _currentJoystickPos.x = (_currentJoystickPos.x < 0 ? -1 : 0);
             }
             break;
         default:

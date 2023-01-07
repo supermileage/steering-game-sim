@@ -12,11 +12,6 @@ void Shape::setColour(int32_t value) {
 	_colour = value;
 }
 
-void Shape::setPosition(int32_t xpos, int32_t ypos) {
-	_x = xpos;
-	_y  =ypos;
-}
-
 int32_t Shape::getColour() {
 	return _colour;
 }

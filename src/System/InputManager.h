@@ -20,7 +20,7 @@ class InputManager {
         void setButtonReleasedCallback2(void (Game::*callback)(void));
         void setCloseRequestCallback(void (Game::*callback)(void));
 
-        /* Returns 'joystick' position with floating point values [-100,100] on x, y */
+        /* Returns 'joystick' position with floating point values [-1,1] on x, y */
         Vec2 currentJoystickPos();
 
     private:

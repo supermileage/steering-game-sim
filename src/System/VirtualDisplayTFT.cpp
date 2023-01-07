@@ -10,19 +10,19 @@ int VirtualDisplayTFT::height() {
     return (int)_window->getSize().y;
 }
 
-void VirtualDisplayTFT::registerShape(Graphic* shape, VirtualDisplayTFT::GraphicType type) {
+void VirtualDisplayTFT::registerShape(int id, VirtualDisplayTFT::GraphicType type) {
     switch (type) {
         case VirtualDisplayTFT::Circle:
-            _graphicsMap[shape] = new sf::CircleShape();
+            _graphicsMap[id] = new sf::CircleShape();
             break;
         case VirtualDisplayTFT::Rectangle:
-            _graphicsMap[shape] = new sf::RectangleShape();
+            _graphicsMap[id] = new sf::RectangleShape();
             break;
         case VirtualDisplayTFT::BitmapData:
-            _graphicsMap[shape] = new sf::Sprite();
+            _graphicsMap[id] = new sf::Sprite();
             break;
         case VirtualDisplayTFT::Text:
-            _graphicsMap[shape] = new sf::Text();
+            _graphicsMap[id] = new sf::Text();
             break;
         default:
             break;
@@ -38,12 +38,12 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour) {
 }
 
 void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour) {
-    sf::CircleShape testCircle;
-    testCircle.setRadius(r);
-    testCircle.setPosition(x, y);
-    testCircle.setFillColor(sf::Color::White);
-    _window->draw(testCircle);
-    _window->display();
+    // sf::CircleShape testCircle;
+    // testCircle.setRadius(r);
+    // testCircle.setPosition(x, y);
+    // testCircle.setFillColor(sf::Color::White);
+    // _window->draw(testCircle);
+    // _window->display();
 }
 
 void VirtualDisplayTFT::line(int x0, int y0, int x1, int y1, int colour) {
@@ -91,5 +91,29 @@ int VirtualDisplayTFT::printf(const char *format, ...) {
 }
 
 void VirtualDisplayTFT::set_orientation(unsigned int o) {
+
+}
+
+void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
+    sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
+    circle->setPosition(x, y);
+    circle->setRadius(r);
+    circle->setOutlineColor(sf::Color::White);
+    circle->setFillColor(sf::Color::Black);
+    _window->draw(*circle);
+    _window->display();
+}
+
+void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
+    sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
+    circle->setPosition(x, y);
+    circle->setRadius(r);
+    circle->setFillColor(sf::Color::White);
+    _window->clear();
+    _window->draw(*circle);
+    _window->display();
+}
+
+void VirtualDisplayTFT::clear(int id) {
 
 }

@@ -1,6 +1,7 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include "config.h"
 #include "SPI_TFT_ILI9341.h"
 #include "Timer.h"
 #include "SystemTypes.h"
@@ -23,7 +24,10 @@ class Game {
         Timer* _timer;
         InputManager* _inputManager;
         Vec2 _lastJoystickPos = { 0, 0 };
+        int64_t _lastFrameMillis = 0;
+        int64_t _deltaT = 0;
         bool _run = true;
+
         /* Declare any game objects here */
         Circle* _ball; // example object
 
@@ -33,9 +37,9 @@ class Game {
         void _handleButtonReleased1();
         void _handleButtonPressed2();
         void _handleButtonReleased2();
+
         int64_t _millis();
         int64_t _micros();
-
         void _handleCloseRequest();
 };
 

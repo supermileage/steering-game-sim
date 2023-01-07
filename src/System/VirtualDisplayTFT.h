@@ -6,8 +6,6 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "Graphic.h"
-
 #define RGB(r, g, b) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3)) // 5 red | 6 green | 5 blue
 
 /* some RGB color definitions                                                 */
@@ -196,14 +194,24 @@ class VirtualDisplayTFT
          */
         void set_orientation(unsigned int o);
         
-        /* Not included in firmware TFT object */
-        void registerShape(Graphic* shape, VirtualDisplayTFT::GraphicType type);
+        /* Method below is not included in firmware TFT object -- do not use */
+        void registerShape(int id, VirtualDisplayTFT::GraphicType type);
+
+        /* Method below is not included in firmware TFT object -- do not use */
+        void circle(int x, int y, int r, int colour, int id);
+        
+        /* Method below is not included in firmware TFT object -- do not use */
+        void fillcircle(int x, int y, int r, int colour, int id);
+
+        /* Method below is not included in firmware TFT object -- do not use */
+        void clear(int id);
+
 
     private:
         unsigned char *font;
         sf::RenderWindow* _window;
         uint16_t _background;
-        std::unordered_map<Graphic*, sf::Drawable*> _graphicsMap;
+        std::unordered_map<int, sf::Drawable*> _graphicsMap;
 };
 
 #endif

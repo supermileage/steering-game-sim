@@ -9,6 +9,7 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 SRC_DIRS := $(SRC_DIR)/
 SRC_DIRS += $(wildcard $(SRC_DIR)/*/)
+SRC_DIRS += $(wildcard $(LIB_DIR)/*/)
 
 CPPSRC := $(foreach %,$(SRC_DIRS),$(wildcard $(%)*.cpp))
 OBJ := $(foreach %,$(CPPSRC:.cpp=.o),$(BUILD_DIR)/$(%))

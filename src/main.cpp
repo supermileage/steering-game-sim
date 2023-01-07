@@ -1,10 +1,10 @@
 #include "SFML/Graphics.hpp"
+#include "config.h"
+
+#include "VirtualDisplayTFT.h"
 #include "Game.h"
 
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 800
-#define GAME_NAME "Pong"
-
+/* Please don't make any changes here */
 int main(int argc, char* argv[]) {
     sf::RenderWindow window;
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), GAME_NAME);
@@ -14,8 +14,8 @@ int main(int argc, char* argv[]) {
     Game game(&tft, &inputManager);
 
     game.init();
-    int ret = game.run();
+    int status = game.run();
 
     window.close();
-    return ret;
+    exit(status);
 }
