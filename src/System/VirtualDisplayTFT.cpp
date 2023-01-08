@@ -101,7 +101,6 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
     circle->setOutlineColor(sf::Color::White);
     circle->setFillColor(sf::Color::Black);
     _window->draw(*circle);
-    _window->display();
 }
 
 void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
@@ -109,11 +108,13 @@ void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
     circle->setPosition(x, y);
     circle->setRadius(r);
     circle->setFillColor(sf::Color::White);
-    _window->clear();
     _window->draw(*circle);
-    _window->display();
 }
 
-void VirtualDisplayTFT::clear(int id) {
+void VirtualDisplayTFT::clear() {
+    _window->clear();
+}
 
+void VirtualDisplayTFT::display() {
+    _window->display();
 }

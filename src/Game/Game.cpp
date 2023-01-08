@@ -1,94 +1,94 @@
 #include "Game.h"
 
-using namespace std::chrono;
+#include <iostream>
 
-Game::Game(SPI_TFT_ILI9341* tft, InputManager* inputManager) : _tft(tft), _inputManager(inputManager) {
-    _timer = new Timer();
-    _inputManager->setGame(this);
-    _inputManager->setButtonPressedCallback1(&Game::_handleButtonPressed1);
-    _inputManager->setButtonReleasedCallback1(&Game::_handleButtonReleased1);
-    _inputManager->setButtonPressedCallback2(&Game::_handleButtonPressed2);
-    _inputManager->setButtonReleasedCallback2(&Game::_handleButtonReleased2);
-    _inputManager->setCloseRequestCallback(&Game::_handleCloseRequest);
-}
+#define BALL_SPEED 10
+#define BALL_RADIUS 40
 
-Game::~Game() {
-    delete _timer;
-}
+/* Declare any game objects here */
+Circle* ball1; // example
+Circle* ball2; // example
+Circle* ball3; // example
+std::vector<Circle*> balls;
 
-void Game::init() {
-    _timer->start();
-    _tft->background(BlackTFT);
-    _tft->cls();
-
+/* Game setup */
+void Game::setup() {
     // Initialize any game objects with their start positions here.  Assume that _tft->width()
     // and _tft->height() may vary, so try to avoid using hard-coded positions (ie. you should able
     // to play your game on different-sized screens / windows)
 
     // example code:
-    _ball = new Circle();
-    _ball->init(_tft, 0, _tft->height() / 2, WhiteTFT, 20, true);
-    _ball->setDirection(Vec2 { 1, 0 });
-    _ball->setSpeed(15);
-    _ball->draw();
+    ball1 = new Circle("ball1", true);
+    ball1->init(_tft, BALL_RADIUS, _tft->height() - BALL_RADIUS, WhiteTFT, BALL_RADIUS, true);
+    ball1->setDirection(Vec2 { 2.5, -1 });
+    ball1->setSpeed(BALL_SPEED);
+    balls.push_back(ball1);
+
+    ball2 = new Circle("ball2", true);
+    ball2->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
+    ball2->setDirection(Vec2 { -2.5, -1 });
+    ball2->setSpeed(BALL_SPEED);
+    balls.push_back(ball2);
+
+    ball3 = new Circle("ball3", true);
+    ball3->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
+    ball3->setDirection(Vec2 { 1, -2.5 });
+    ball3->setSpeed(BALL_SPEED);
+    balls.push_back(ball3);
 }
 
-int Game::run() {
-    while (_run) {
-        _inputManager->run();
-
-        Vec2 curJoystickPos = _inputManager->currentJoystickPos();
-        if (curJoystickPos != _lastJoystickPos) {
-            _handleJoystickChanged(curJoystickPos);
-            _lastJoystickPos = curJoystickPos;
-        }
-
-        int64_t currentTime = _millis();
-            if (currentTime > _lastFrameMillis + FRAME_RATE_MILLIS) {
-                _deltaT = currentTime - _lastFrameMillis;
-                _loop();
-
-                _lastFrameMillis = currentTime;
-            }
-        
+void Game::cleanup() {
+    for (Circle* ball : balls) {
+        delete ball;
     }
-
-    return 1;
+    balls.clear();
 }
 
-void Game::_loop() {
-    /* Game loop */
-    _ball->move();
+/* Game loop */
+void Game::loop() {
+    // example
+    for (Circle* ball : balls) {
+        if (ball->getPosition().x + ball->getRadius() < 0 || 
+            ball->getPosition().x + ball->getRadius() > _tft->width()) {
+            ball->setDirection(Vec2 { -ball->getDirection().x, ball->getDirection().y });
+        }
+        if (ball->getPosition().y + ball->getRadius() < 0 || 
+            ball->getPosition().y + ball->getRadius() > _tft->height()) {
+            ball->setDirection(Vec2 { ball->getDirection().x, -ball->getDirection().y });
+        }
+        if (ball->move()) {
+            draw(ball);
+        }
+    }
 }
 
-void Game::_handleJoystickChanged(Vec2 pos) {
-    /* handle joystick-related behavior */
+/* Joystick changed event */
+void Game::handleJoystickChanged(Vec2 vec) {
+    // example
+    ball1->setDirection(vec);
 }
 
-void Game::_handleButtonPressed1() {
-    /* Button 1 press behavior here */
+/* Collision event -- strings are names of Graphic objects which have collided */
+void Game::handleCollision(const std::string& obj1, const std::string& obj2) {
+    std::cout << "Collision! obj1 = " << obj1 << " , obj2 = " << obj2 << std::endl;
 }
 
-void Game::_handleButtonReleased1() {
-    /* Button 1 release behavior here */
+/* Button 1 pressed event */
+void Game::handleButtonPressed1() {
+    
 }
 
-void Game::_handleButtonPressed2() {
-    /* Button 2 press behavior here */
+/* Button 1 released event */
+void Game::handleButtonReleased1() {
+    
 }
 
-void Game::_handleButtonReleased2() {
-    /* Button 2 release behavior here */
+/* Button 2 pressed event */
+void Game::handleButtonPressed2() {
+    
 }
 
-int64_t Game::_millis() {
-    return duration_cast<milliseconds>(_timer->elapsed_time()).count();
-}
-
-int64_t Game::_micros() {
-    return duration_cast<microseconds>(_timer->elapsed_time()).count();
-}
-
-void Game::_handleCloseRequest() {
-    _run = false;
+/* Button 2 released event */
+void Game::handleButtonReleased2() {
+    
 }

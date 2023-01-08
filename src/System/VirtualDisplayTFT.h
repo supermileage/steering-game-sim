@@ -204,7 +204,9 @@ class VirtualDisplayTFT
         void fillcircle(int x, int y, int r, int colour, int id);
 
         /* Method below is not included in firmware TFT object -- do not use */
-        void clear(int id);
+        void clear();
+
+        void display();
 
 
     private:

@@ -1,6 +1,8 @@
 #include "Circle.h"
 
-/* implementation changed -- does not port back to steering */
+Circle::Circle(std::string name, bool enableCollisions) : Graphic(name, enableCollisions) { }
+
+// PORTING: Use original implementation in hardware
 void Circle::init(SPI_TFT_ILI9341* tft, int32_t xpos, int32_t ypos, int32_t colour, int32_t radius, bool fill) {
 	Shape::init(tft, xpos, ypos, colour);
 	_radius = radius;
@@ -8,7 +10,7 @@ void Circle::init(SPI_TFT_ILI9341* tft, int32_t xpos, int32_t ypos, int32_t colo
 	_tft->registerShape(_id, VirtualDisplayTFT::Circle);
 }
 
-/* implementation changed -- does not port back to steering */
+// PORTING: Use original implementation in hardware
 void Circle::draw() {
 	if (_fill)
 		_tft->fillcircle(_x, _y, _radius, _colour, _id);
@@ -16,6 +18,23 @@ void Circle::draw() {
 		_tft->circle(_x, _y, _radius, _colour, _id);
 }
 
+// PORTING: Use original implementation in hardware
 void Circle::clear() {
-	_tft->clear(id);
+	
+}
+
+void Circle::setRadius(int32_t r) {
+	_radius = r;
+}
+
+int32_t Circle::getRadius() {
+	return _radius;
+}
+
+int32_t Circle::getFarthestPixelDistance() {
+	return _radius;
+}
+
+bool Circle::_hasCollidedWith(Graphic* graphic) {
+	return false;
 }

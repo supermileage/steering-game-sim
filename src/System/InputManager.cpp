@@ -1,9 +1,18 @@
 #include "config.h"
 #include "InputManager.h"
 
+#include <iostream>
+
 InputManager::InputManager(sf::RenderWindow* window) : _window(window) { }
 
-void InputManager::init() { }
+void InputManager::init() {
+    _keyStateMap[BUTTON_1] = false;
+    _keyStateMap[BUTTON_2] = false;
+    _keyStateMap[sf::Keyboard::Up] = false;
+    _keyStateMap[sf::Keyboard::Down] = false;
+    _keyStateMap[sf::Keyboard::Left] = false;
+    _keyStateMap[sf::Keyboard::Right] = false;
+}
 
 void InputManager::run() {
     while (_window->pollEvent(_windowEvent)) {
@@ -47,11 +56,21 @@ void InputManager::setCloseRequestCallback(void (Game::*callback)(void)) {
     _closeRequestCallback = callback;
 }
 
+void InputManager::setJoystickChangedCallback(void (Game::*callback)(Vec2)) {
+    _joystickCallback = callback;
+}
+
 Vec2 InputManager::currentJoystickPos() {
     return Vec2 { 0, 0 };
 }
 
 void InputManager::_handleKeyPressed() {
+    if (_keyStateMap[_windowEvent.key.code]) {
+        return;
+    }
+
+    _keyStateMap[_windowEvent.key.code] = true;
+
     switch (_windowEvent.key.code) {
         case BUTTON_1:
             (_game->*_pressedCallback1)();
@@ -71,6 +90,12 @@ void InputManager::_handleKeyPressed() {
 }
 
 void InputManager::_handleKeyReleased() {
+    if (!_keyStateMap[_windowEvent.key.code]) {
+        return;
+    }
+
+    _keyStateMap[_windowEvent.key.code] = false;
+
     switch (_windowEvent.key.code) {
         case BUTTON_1:
             (_game->*_releasedCallback1)();
@@ -125,7 +150,9 @@ void InputManager::_updateJoystick(sf::Keyboard::Key key, sf::Event::EventType t
 
     // check if Vec2 should be 45°
     if (_currentJoystickPos.x != 0 && _currentJoystickPos.y != 0) {
-        _currentJoystickPos.x = _currentJoystickPos.x * 0.7071;
-        _currentJoystickPos.y = _currentJoystickPos.y * 0.7071;
+        _currentJoystickPos.x = (_currentJoystickPos.x < 0 ? -0.7071 : 0.7071);
+        _currentJoystickPos.y = (_currentJoystickPos.y < 0 ? -0.7071 : 0.7071);
     }
+
+    (_game->*_joystickCallback)(_currentJoystickPos);
 }
