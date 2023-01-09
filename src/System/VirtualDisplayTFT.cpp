@@ -121,9 +121,10 @@ void VirtualDisplayTFT::rect(int x1, int y1, int x2, int y2, int colour, int id)
     sf::Vector2f* sizeVec = _sizeMap[id];
     sizeVec->x = width;
     sizeVec->y = height;
-    rectangle->setOutlineThickness(5);
     rectangle->setSize(*sizeVec);
+    rectangle->setOutlineThickness(5);
     rectangle->setOutlineColor(sf::Color::White);
+    rectangle->setOutlineColor(sf::Color::Black);
     _window->draw(*rectangle);
 }
 

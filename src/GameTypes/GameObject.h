@@ -32,8 +32,8 @@ class GameObject : public Shape {
 		Vec2 getDirection();
 		void setSpeed(int32_t speed);
 		int32_t getSpeed();
-        virtual void setPosition(Point pos);
-        virtual Point getPosition();
+        void setPosition(Point pos);
+        Point getPosition();
         void setCollider(Collider* collider);
         Collider* getCollider();
         /* Returns true if position has been updated */

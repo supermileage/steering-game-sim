@@ -41,12 +41,40 @@ void CollisionHandler::_checkCollision(Collider* collider1, Collider* collider2)
 }
 
 bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* rectangle) {
-    util::Point p1 = rectangle->getPosition();
-    util::Point p2 = circle->getPosition();
-    int32_t distance = util::computeDistance(circle->getPosition(), rectangle->getPosition());
+    util::Point corner1 = rectangle->getPosition();
+    util::Point corner2 = util::Point {corner1.x + rectangle->getWidth(), corner1.y + rectangle->getHeight()};
+    util::Point topLeft;
+    util::Point bottomRight;
+    topLeft.x = (corner1.x < corner2.x ? corner1.x : corner2.x);
+    bottomRight.x = (corner1.x > corner2.x ? corner1.x : corner2.x);
+    topLeft.y = (corner1.y < corner2.y ? corner1.y : corner2.y);
+    bottomRight.y = (corner1.y > corner2.y ? corner1.y : corner2.y);
 
-    return util::computeDistance(circle->getPosition(), rectangle->getPosition()) <=
-        circle->getRadius() + rectangle->getWidth() / 2;
+    if (circle->getPosition().x >= topLeft.x - circle->getRadius()) {
+        // left collision
+        return circle->getPosition().y >= topLeft.y - circle->getRadius() &&
+            circle->getPosition().y <= bottomRight.y + circle->getRadius();
+    }
+
+    if (circle->getPosition().x <= bottomRight.x + circle->getRadius()) {
+        // right collision
+        return circle->getPosition().y >= topLeft.y - circle->getRadius() &&
+            circle->getPosition().y <= bottomRight.y + circle->getRadius();
+    }
+
+    if (circle->getPosition().y >= topLeft.y - circle->getRadius()) {
+        // top collision
+        return circle->getPosition().x >= topLeft.x - circle->getRadius() &&
+            circle->getPosition().x <= bottomRight.x + circle->getRadius();
+    }
+
+    if (circle->getPosition().y <= bottomRight.y + circle->getRadius()) {
+        // bottom collision
+        return circle->getPosition().x >= topLeft.x - circle->getRadius() &&
+            circle->getPosition().x <= bottomRight.x + circle->getRadius();
+    }
+
+    return false;
 }
 
 bool CollisionHandler::haveCollided(CircleCollider* circle1, CircleCollider* circle2) {

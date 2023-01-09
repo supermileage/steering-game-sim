@@ -3,7 +3,7 @@
 RectangleCollider::RectangleCollider(GameObject* owner, int32_t width, int32_t height) :
  Collider(owner), _width(width), _height(height) {
     _type = Rectangle;
-    _farthestDistanceFromCenter = util::computeDistance(util::Point { 0 , 0 }, util::Point { _width / 2, _height / 2 });
+    _farthestDistanceFromCenter = util::computeDistance(util::Point { 0 , 0 }, util::Point { _width, _height });
 }
 
 void RectangleCollider::setWidth(int32_t width) {
