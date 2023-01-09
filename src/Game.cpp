@@ -1,5 +1,4 @@
 #include "Game.h"
-
 #include <iostream>
 
 /* Add includes for any graphics/bitmaps you want to use */

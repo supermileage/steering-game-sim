@@ -4,7 +4,7 @@
 #include "VirtualDisplayTFT.h"
 #include "Game.h"
 
-/* Please don't make any changes here (edit Game/Game.cpp) */
+/* Please don't make any changes here (edit Game.cpp) */
 int main(int argc, char* argv[]) {
     sf::RenderWindow window;
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), GAME_NAME);
