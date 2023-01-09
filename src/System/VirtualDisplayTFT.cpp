@@ -99,6 +99,7 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
     sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
     circle->setPosition(x, y);
     circle->setRadius(r);
+    circle->setOutlineThickness(5);
     circle->setOutlineColor(sf::Color::White);
     circle->setFillColor(sf::Color::Black);
     _window->draw(*circle);
@@ -116,10 +117,11 @@ void VirtualDisplayTFT::rect(int x1, int y1, int x2, int y2, int colour, int id)
     sf::RectangleShape* rectangle = (sf::RectangleShape*)_graphicsMap[id];
     int width = x2 - x1;
     int height = y2 - y1;
-    rectangle->setPosition(x2 - (width / 2), y2 - (height / 2));
+    rectangle->setPosition(x1, y1);
     sf::Vector2f* sizeVec = _sizeMap[id];
     sizeVec->x = width;
     sizeVec->y = height;
+    rectangle->setOutlineThickness(5);
     rectangle->setSize(*sizeVec);
     rectangle->setOutlineColor(sf::Color::White);
     _window->draw(*rectangle);
@@ -129,7 +131,7 @@ void VirtualDisplayTFT::fillrect(int x1, int y1, int x2, int y2, int colour, int
     sf::RectangleShape* rectangle = (sf::RectangleShape*)_graphicsMap[id];
     int width = x2 - x1;
     int height = y2 - y1;
-    rectangle->setPosition(x2 - (width / 2), y2 - (height / 2));
+    rectangle->setPosition(x1, y1);
     sf::Vector2f* sizeVec = _sizeMap[id];
     sizeVec->x = width;
     sizeVec->y = height;

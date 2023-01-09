@@ -32,6 +32,9 @@ void GameBase::init() {
     setup();
 
     _renderThread.start(&GameBase::_runRenderQueue, this);
+    
+    GameObject::drawAll(); // PORTING: remove this in steering version (render queue will handle all rendering)
+    _tft->display(); // PORTING: remove this in steering version (render queue will handle all rendering)
 }
 
 int GameBase::run() {

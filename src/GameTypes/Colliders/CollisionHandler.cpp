@@ -41,6 +41,10 @@ void CollisionHandler::_checkCollision(Collider* collider1, Collider* collider2)
 }
 
 bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* rectangle) {
+    util::Point p1 = rectangle->getPosition();
+    util::Point p2 = circle->getPosition();
+    int32_t distance = util::computeDistance(circle->getPosition(), rectangle->getPosition());
+
     return util::computeDistance(circle->getPosition(), rectangle->getPosition()) <=
         circle->getRadius() + rectangle->getWidth() / 2;
 }

@@ -10,10 +10,13 @@
 
 #define PADDLE_NAME "paddle"
 #define PADDLE_SPEED 10
-#define PADDLE_WIDTH 20
-#define PADDLE_HEIGHT 100
-#define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 4
+#define PADDLE_WIDTH 200
+#define PADDLE_HEIGHT 200
+// #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
+// #define PADDLE_START_Y WINDOW_HEIGHT / 2
+#define PADDLE_START_X WINDOW_WIDTH / 2
 #define PADDLE_START_Y WINDOW_HEIGHT / 2
+#define PADDLE_START util::Point { PADDLE_START_X, PADDLE_START_Y }
 
 /* Declare any global game objects here */
 Rectangle* paddle;
@@ -30,25 +33,28 @@ void Game::setup() {
     // example code:
     // SPI_TFT_ILI9341* tft, int32_t xpos1, int32_t ypos1, int32_t colour, int32_t xpos2, int32_t ypos2, bool fill
     paddle = new Rectangle("paddle", true);
-    paddle->init(_tft, PADDLE_START_X - PADDLE_WIDTH, PADDLE_START_Y - PADDLE_HEIGHT, WhiteTFT,
-        PADDLE_START_X + PADDLE_WIDTH, PADDLE_START_Y + PADDLE_HEIGHT, true);
+    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, WhiteTFT, false);
     paddle->setDirection(Vec2 { 0, 0 });
     paddle->setSpeed(PADDLE_SPEED);
+    draw(paddle);
 
     ball1 = new Circle("ball1", true);
     ball1->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
     ball1->setDirection(Vec2 { -2.5, -1 });
     ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
+    draw(ball1);
 
     // ball2 = new Circle("ball2", true);
     // ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
     // ball2->setDirection(Vec2 { 1, -2.5 });
     // ball2->setSpeed(BALL_SPEED);
     // balls.push_back(ball2);
+    // draw(ball2);
 }
 
 void Game::cleanup() {
+    delete paddle;
     for (Circle* ball : balls) {
         delete ball;
     }

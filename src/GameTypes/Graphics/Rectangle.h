@@ -18,7 +18,7 @@ class Rectangle : public GameObject {
 	protected:
 		int32_t _x2;
 		int32_t _y2;
-		Point _center;
+		util::Point _center;
 		int32_t _width;
 		int32_t _height;
 		bool _fill;

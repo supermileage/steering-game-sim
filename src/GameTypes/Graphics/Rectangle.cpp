@@ -20,14 +20,9 @@ void Rectangle::init(SPI_TFT_ILI9341* tft, int32_t xpos1, int32_t ypos1, int32_t
 	}
 }
 
-void Rectangle::init(SPI_TFT_ILI9341* tft, Point center, int32_t width, int32_t height, int32_t colour, bool fill) {
-	Shape::init(tft, center.x-width/2, center.y-height/2, colour);
-
-	_x2 = center.x+width/2;
-	_y2 = center.y+height/2;
-	_width = width;
-	_height = height;
-	_fill = fill;
+void Rectangle::init(SPI_TFT_ILI9341* tft, util::Point center, int32_t width, int32_t height, int32_t colour, bool fill) {
+	init(tft, center.x-width/2, center.y-height/2, colour, center.x+width/2, center.y+height/2, fill);
+	_center = center;
 }
 
 // PORTING: Use original implementation in hardware
