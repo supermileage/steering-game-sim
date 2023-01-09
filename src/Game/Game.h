@@ -8,9 +8,7 @@
 #include "util.h"
 #include "InputManager.h"
 #include "ThreadedQueue.h"
-
-/* Add includes for any graphics/bitmaps you want to use */
-#include "Circle.h"
+#include "GameObject.h"
 
 class InputManager;
 
@@ -31,24 +29,24 @@ class Game {
         int64_t _deltaT = 0;
         bool _run = true;
         Thread _renderThread;
-        ThreadedQueue<Graphic*> _renderQueue;
+        ThreadedQueue<GameObject*> _renderQueue;
 
         /* Primary Game API */
         void setup();
         void cleanup();
         void loop();
         void handleJoystickChanged(Vec2 vec);
-        void handleCollision(const std::string& obj1, const std::string& obj2);
+        void handleCollision(GameObject* obj1, GameObject* obj2);
         void handleButtonPressed1();
         void handleButtonReleased1();
         void handleButtonPressed2();
         void handleButtonReleased2();
         int64_t millis();
         int64_t micros();
-        void draw(Graphic* graphic);
+        void draw(GameObject* graphic);
 
         void _handleCloseRequest();
-        void _handleCollision(util::Collision collision);
+        void _handleCollision(GameObject::Collision collision);
         void _runRenderQueue();
 };
 

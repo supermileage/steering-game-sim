@@ -8,8 +8,8 @@ BUILD_DIR = obj
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 SRC_DIRS := $(SRC_DIR)/
-SRC_DIRS += $(wildcard $(SRC_DIR)/*/)
-SRC_DIRS += $(wildcard $(LIB_DIR)/*/)
+SRC_DIRS += $(sort $(dir $(wildcard $(SRC_DIR)/*/*/)))
+SRC_DIRS += $(sort $(dir $(wildcard $(LIB_DIR)/*/)))
 
 CPPSRC := $(foreach %,$(SRC_DIRS),$(wildcard $(%)*.cpp))
 OBJ := $(foreach %,$(CPPSRC:.cpp=.o),$(BUILD_DIR)/$(%))
@@ -21,10 +21,13 @@ INCLUDE_FLAGS := $(foreach %, $(SRC_DIRS), $(INCLUDE_PREFIX)$(%))
 $(DEP_DIR)/%.d:
 	@mkdir -p $(@D)
 
-$(BUILD_DIR)/%.o: %.cpp $(DEP_DIR)/%.d
+$(DEP_DIR):
+	@mkdir -p $(DEP_DIR)
+
+$(BUILD_DIR)/%.o: %.cpp $(DEP_DIR)/%.d | $(DEP_DIR)
 	@echo ' *** compiling $< *** '
 	@mkdir -p $(@D)
-	@$(CC) $(CXXFLAGS) -g $(DEPFLAGS) -c -o $@ $< $(INCLUDE_FLAGS)
+	@$(CC) $(CXXFLAGS) $(DEPFLAGS) -g -c -o $@ $< $(INCLUDE_FLAGS)
 
 game: $(OBJ)
 	@echo ' *** Building $@ *** '
@@ -32,3 +35,5 @@ game: $(OBJ)
 
 clean:
 	@rm -r $(OBJ) $(DEPENDENCIES) game
+
+-include $(DEPENDENCIES)

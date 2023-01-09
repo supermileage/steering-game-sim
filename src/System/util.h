@@ -61,19 +61,12 @@ namespace util {
         }
     };
 
-    struct Pos {
+    struct Point {
         int32_t x;
         int32_t y;
     };
 
-    struct Collision {
-        const std::string& obj1;
-        const std::string& obj2;
-
-        Collision(const std::string& n1, const std::string& n2) : obj1(n2), obj2(n2) { }
-    };
-
-    int32_t computeDistance(Pos p1, Pos p2);
+    int32_t computeDistance(Point p1, Point p2);
 }
 
 #endif

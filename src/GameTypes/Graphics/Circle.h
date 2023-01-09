@@ -1,9 +1,10 @@
 #ifndef _CIRCLE_H_
 #define _CIRCLE_H_
 
-#include "Graphic.h"
+#include "GameObject.h"
 
-class Circle : public Graphic {
+// PORTING: either create separate class or add GameObject to hierarchy
+class Circle : public GameObject {
 	public:
 		Circle(std::string name = "", bool enableCollisions = false);
 		~Circle() { }
@@ -12,13 +13,10 @@ class Circle : public Graphic {
 		void clear() override;
 		void setRadius(int32_t r);
 		int32_t getRadius();
-		int32_t getFarthestPixelDistance() override;
 		
 	private:
 		int32_t _radius;
 		bool _fill;
-
-		bool _hasCollidedWith(Graphic* graphic) override;
 };
 
 #endif

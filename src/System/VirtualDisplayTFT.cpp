@@ -10,13 +10,14 @@ int VirtualDisplayTFT::height() {
     return (int)_window->getSize().y;
 }
 
-void VirtualDisplayTFT::registerShape(int id, VirtualDisplayTFT::GraphicType type) {
+void VirtualDisplayTFT::registerShape(int id, VirtualDisplayTFT::GameObjectType type) {
     switch (type) {
         case VirtualDisplayTFT::Circle:
             _graphicsMap[id] = new sf::CircleShape();
             break;
         case VirtualDisplayTFT::Rectangle:
             _graphicsMap[id] = new sf::RectangleShape();
+            _sizeMap[id] = new sf::Vector2f(0, 0);
             break;
         case VirtualDisplayTFT::BitmapData:
             _graphicsMap[id] = new sf::Sprite();
@@ -109,6 +110,32 @@ void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
     circle->setRadius(r);
     circle->setFillColor(sf::Color::White);
     _window->draw(*circle);
+}
+
+void VirtualDisplayTFT::rect(int x1, int y1, int x2, int y2, int colour, int id) {
+    sf::RectangleShape* rectangle = (sf::RectangleShape*)_graphicsMap[id];
+    int width = x2 - x1;
+    int height = y2 - y1;
+    rectangle->setPosition(x2 - (width / 2), y2 - (height / 2));
+    sf::Vector2f* sizeVec = _sizeMap[id];
+    sizeVec->x = width;
+    sizeVec->y = height;
+    rectangle->setSize(*sizeVec);
+    rectangle->setOutlineColor(sf::Color::White);
+    _window->draw(*rectangle);
+}
+
+void VirtualDisplayTFT::fillrect(int x1, int y1, int x2, int y2, int colour, int id) {
+    sf::RectangleShape* rectangle = (sf::RectangleShape*)_graphicsMap[id];
+    int width = x2 - x1;
+    int height = y2 - y1;
+    rectangle->setPosition(x2 - (width / 2), y2 - (height / 2));
+    sf::Vector2f* sizeVec = _sizeMap[id];
+    sizeVec->x = width;
+    sizeVec->y = height;
+    rectangle->setSize(*sizeVec);
+    rectangle->setFillColor(sf::Color::White);
+    _window->draw(*rectangle);
 }
 
 void VirtualDisplayTFT::clear() {

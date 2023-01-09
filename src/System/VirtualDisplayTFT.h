@@ -56,7 +56,7 @@ class VirtualDisplayTFT
 {
     public:
         /* Not included in */
-        enum GraphicType { Circle, Rectangle, BitmapData, Text };
+        enum GameObjectType { Circle, Rectangle, BitmapData, Text };
 
         VirtualDisplayTFT(sf::RenderWindow* window);
 
@@ -195,13 +195,19 @@ class VirtualDisplayTFT
         void set_orientation(unsigned int o);
         
         /* Method below is not included in firmware TFT object -- do not use */
-        void registerShape(int id, VirtualDisplayTFT::GraphicType type);
+        void registerShape(int id, VirtualDisplayTFT::GameObjectType type);
 
         /* Method below is not included in firmware TFT object -- do not use */
         void circle(int x, int y, int r, int colour, int id);
         
         /* Method below is not included in firmware TFT object -- do not use */
         void fillcircle(int x, int y, int r, int colour, int id);
+
+        /* Method below is not included in firmware TFT object -- do not use */
+        void rect(int x1, int y1, int x2, int y2, int colour, int id);
+
+        /* Method below is not included in firmware TFT object -- do not use */
+        void fillrect(int x1, int y1, int x2, int y2, int colour, int id);
 
         /* Method below is not included in firmware TFT object -- do not use */
         void clear();
@@ -214,6 +220,7 @@ class VirtualDisplayTFT
         sf::RenderWindow* _window;
         uint16_t _background;
         std::unordered_map<int, sf::Drawable*> _graphicsMap;
+        std::unordered_map<int, sf::Vector2f*> _sizeMap;
 };
 
 #endif
