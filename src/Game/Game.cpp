@@ -82,6 +82,7 @@ void Game::handleJoystickChanged(Vec2 vec) {
     paddle->setDirection(Vec2 { 0, vec.y } );
 }
 
+// TODO: Add point of collision
 /* Collision event -- params are game objects which have collided */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2) {
     if (obj1->getName().compare(PADDLE_NAME) == 0) {

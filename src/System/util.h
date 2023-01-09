@@ -3,6 +3,7 @@
 
 #include <string>
 
+// PORTING: this file and cpp must be added to firmware
 namespace util {
 
 	/**

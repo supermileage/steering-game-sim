@@ -76,6 +76,7 @@ bool GameObject::move() {
     return false;
 }
 
+/* Static methods */
 void GameObject::drawAll() {
     for (GameObject* graphic : _allGameObjects) {
         graphic->draw();

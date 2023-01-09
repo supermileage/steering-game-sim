@@ -32,31 +32,31 @@ void InputManager::run() {
     }
 }
 
-void InputManager::setGame(Game* game) {
+void InputManager::setGame(GameBase* game) {
     _game = game;
 }
 
-void InputManager::setButtonPressedCallback1(void (Game::*callback)(void)) {
+void InputManager::setButtonPressedCallback1(void (GameBase::*callback)(void)) {
     _pressedCallback1 = callback;
 }
 
-void InputManager::setButtonReleasedCallback1(void (Game::*callback)(void)) {
+void InputManager::setButtonReleasedCallback1(void (GameBase::*callback)(void)) {
     _releasedCallback1 = callback;
 }
 
-void InputManager::setButtonPressedCallback2(void (Game::*callback)(void)) {
+void InputManager::setButtonPressedCallback2(void (GameBase::*callback)(void)) {
     _pressedCallback2 = callback;
 }
 
-void InputManager::setButtonReleasedCallback2(void (Game::*callback)(void)) {
+void InputManager::setButtonReleasedCallback2(void (GameBase::*callback)(void)) {
     _releasedCallback2 = callback;
 }
 
-void InputManager::setCloseRequestCallback(void (Game::*callback)(void)) {
+void InputManager::setCloseRequestCallback(void (GameBase::*callback)(void)) {
     _closeRequestCallback = callback;
 }
 
-void InputManager::setJoystickChangedCallback(void (Game::*callback)(Vec2)) {
+void InputManager::setJoystickChangedCallback(void (GameBase::*callback)(Vec2)) {
     _joystickCallback = callback;
 }
 
