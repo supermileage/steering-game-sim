@@ -31,7 +31,7 @@ void Game::setup() {
     // example code:
     // SPI_TFT_ILI9341* tft, int32_t xpos1, int32_t ypos1, int32_t colour, int32_t xpos2, int32_t ypos2, bool fill
     paddle = new Rectangle("paddle", true);
-    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, WhiteTFT, false);
+    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, WhiteTFT, true);
     paddle->setDirection(Vec2 { 0, 0 });
     paddle->setSpeed(PADDLE_SPEED);
     draw(paddle);
@@ -85,7 +85,7 @@ void Game::handleJoystickChanged(Vec2 vec) {
     paddle->setDirection(Vec2 { 0, vec.y } );
 }
 
-/* Collision event -- params are game objects which have collided */
+/* Collision event -- params are game objects which have collided, contact is point of collision (on obj1) */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) {
     if (obj1->getName().compare(PADDLE_NAME) == 0) {
         if (contact.x == paddle->getPosition().x || contact.x == paddle->getPosition().x + paddle->getWidth()) {
