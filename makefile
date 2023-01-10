@@ -49,6 +49,6 @@ tests: $(OBJ_TEST)
 all: game tests
 
 clean:
-	@rm -r $(OBJ) $(DEPENDENCIES) game
+	@rm -r $(OBJ) $(OBJ_TEST) $(DEPENDENCIES) game
 
 -include $(DEPENDENCIES)

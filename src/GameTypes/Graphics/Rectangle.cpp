@@ -53,3 +53,11 @@ bool Rectangle::move() {
     }
     return false;
 }
+
+int32_t Rectangle::getWidth() {
+	return _width;
+}
+
+int32_t Rectangle::getHeight() {
+	return _height;
+}

@@ -54,6 +54,8 @@ bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* r
 		circle->getPosition().x <= bottomRight.x + circle->getRadius()) {
         // side collision
         if (circle->getPosition().y >= topLeft.y && circle->getPosition().y <= bottomRight.y) {
+            contact.x = (topLeft.x - circle->getPosition().x > 0) ? topLeft.x : bottomRight.x;
+            contact.y = circle->getPosition().y;
 			return true;
 		}
     }
@@ -61,10 +63,12 @@ bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* r
     if (circle->getPosition().y >= topLeft.y - circle->getRadius() &&
 		circle->getPosition().y <= bottomRight.y + circle->getRadius()) {
         // top/bottom collision
-        return circle->getPosition().x >= topLeft.x &&
-            circle->getPosition().x <= bottomRight.x;
+        if (circle->getPosition().x >= topLeft.x && circle->getPosition().x <= bottomRight.x) {
+            contact.x = circle->getPosition().x;
+            contact.y = (topLeft.y - circle->getPosition().y > 0) ? topLeft.y : bottomRight.y;
+            return true;
+        }
     }
-
     return false;
 }
 
@@ -74,5 +78,57 @@ bool CollisionHandler::haveCollided(CircleCollider* circle1, CircleCollider* cir
 }
 
 bool CollisionHandler::haveCollided(RectangleCollider* rectangle1, RectangleCollider* rectangle2, util::Point& contact) {
+    // rectangle 1 top left and bottom right corners
+    util::Point corner1 = rectangle1->getPosition();
+    util::Point corner2 = util::Point {corner1.x + rectangle1->getWidth(), corner1.y + rectangle1->getHeight()};
+    util::Point topLeft1;
+    util::Point bottomRight1;
+    topLeft1.x = (corner1.x < corner2.x ? corner1.x : corner2.x);
+    bottomRight1.x = (corner1.x > corner2.x ? corner1.x : corner2.x);
+    topLeft1.y = (corner1.y < corner2.y ? corner1.y : corner2.y);
+    bottomRight1.y = (corner1.y > corner2.y ? corner1.y : corner2.y);
+
+    // rectangle 2 top left and bottom right corners
+    corner1 = rectangle2->getPosition();
+    corner2 = util::Point {corner1.x + rectangle2->getWidth(), corner1.y + rectangle2->getHeight()};
+    util::Point topLeft2;
+    util::Point bottomRight2;
+    topLeft2.x = (corner1.x < corner2.x ? corner1.x : corner2.x);
+    bottomRight2.x = (corner1.x > corner2.x ? corner1.x : corner2.x);
+    topLeft2.y = (corner1.y < corner2.y ? corner1.y : corner2.y);
+    bottomRight2.y = (corner1.y > corner2.y ? corner1.y : corner2.y);
+    
+    if (util::valueWithinRangeInclusive(topLeft2.x, topLeft1.x - rectangle2->getWidth(), bottomRight1.x)) {
+        if (util::valueWithinRangeInclusive(topLeft2.y, topLeft1.y - rectangle2->getHeight(), bottomRight1.y)) {
+            if (topLeft2.y >= topLeft1.y && bottomRight2.y <= bottomRight1.y) {
+                contact.x = (topLeft2.x < topLeft1.x) ? topLeft1.x : bottomRight1.x;
+                contact.y = topLeft2.y;
+                return true;
+            } else if (topLeft2.x >= topLeft1.x && bottomRight2.x <= bottomRight1.x) {
+                contact.x = topLeft2.x;
+                contact.y = (topLeft2.y < topLeft1.y) ? topLeft1.y : bottomRight1.y;
+                return true;
+            } else {
+                if (topLeft2.x <= topLeft1.x) {
+                    if (bottomRight2.y > bottomRight1.y) {
+                        contact.x = topLeft1.x;
+                        contact.y = topLeft2.y;
+                    } else {
+                        contact.x = topLeft1.x;
+                        contact.y = topLeft1.y;
+                    }
+                } else {
+                    if (bottomRight2.y >= bottomRight1.y) {
+                        contact.x = topLeft2.x;
+                        contact.y = bottomRight1.y;
+                    } else {
+                        contact.x = topLeft2.x;
+                        contact.y = topLeft1.y;
+                    }
+                }
+            }
+            return true;
+        }
+    }
     return false;
 }

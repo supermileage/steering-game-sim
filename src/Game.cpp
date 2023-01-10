@@ -5,17 +5,15 @@
 #include "Circle.h"
 #include "Rectangle.h"
 
-#define BALL_SPEED 5
-#define BALL_RADIUS 30
+#define BALL_SPEED 7
+#define BALL_RADIUS 15
 
 #define PADDLE_NAME "paddle"
-#define PADDLE_SPEED 10
-#define PADDLE_WIDTH 200
+#define PADDLE_SPEED 15
+#define PADDLE_WIDTH 40
 #define PADDLE_HEIGHT 200
-// #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
-// #define PADDLE_START_Y WINDOW_HEIGHT / 2
-#define PADDLE_START_X WINDOW_WIDTH / 2
-#define PADDLE_START_Y WINDOW_HEIGHT / 2
+#define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
+#define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_WIDTH / 2
 #define PADDLE_START util::Point { PADDLE_START_X, PADDLE_START_Y }
 
 /* Declare any global game objects here */
@@ -45,12 +43,12 @@ void Game::setup() {
     balls.push_back(ball1);
     draw(ball1);
 
-    // ball2 = new Circle("ball2", true);
-    // ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
-    // ball2->setDirection(Vec2 { 1, -2.5 });
-    // ball2->setSpeed(BALL_SPEED);
-    // balls.push_back(ball2);
-    // draw(ball2);
+    ball2 = new Circle("ball2", true);
+    ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
+    ball2->setDirection(Vec2 { 1, -1 });
+    ball2->setSpeed(BALL_SPEED);
+    balls.push_back(ball2);
+    draw(ball2);
 }
 
 void Game::cleanup() {
@@ -87,11 +85,14 @@ void Game::handleJoystickChanged(Vec2 vec) {
     paddle->setDirection(Vec2 { 0, vec.y } );
 }
 
-// TODO: Add point of collision
 /* Collision event -- params are game objects which have collided */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) {
     if (obj1->getName().compare(PADDLE_NAME) == 0) {
-        obj2->setDirection(Vec2 { -obj2->getDirection().x, -obj2->getDirection().y });
+        if (contact.x == paddle->getPosition().x || contact.x == paddle->getPosition().x + paddle->getWidth()) {
+            obj2->setDirection(Vec2 { -obj2->getDirection().x, obj2->getDirection().y });
+        } else {
+            obj2->setDirection(Vec2 { obj2->getDirection().x, -obj2->getDirection().y });
+        }
         return;
     }
 

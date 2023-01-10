@@ -80,6 +80,16 @@ namespace util {
     };
 
     int32_t computeDistance(Point p1, Point p2);
+
+	template <typename T>
+	bool valueWithinRangeInclusive(T val, T lower, T upper) {
+		return val >= lower && val <= upper;
+	}
+
+	template <typename T>
+	bool valueWithinRangeExclusive(T val, T lower, T upper) {
+		return val > lower && val < upper;
+	}
 }
 
 #endif

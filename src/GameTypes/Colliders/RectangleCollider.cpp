@@ -36,7 +36,7 @@ bool RectangleCollider::_hasCollidedWith(Collider* collider, util::Point& contac
             return CollisionHandler::haveCollided((CircleCollider*)collider, this, contact);
             break;
         case Rectangle:
-            return CollisionHandler::haveCollided((RectangleCollider*)collider, this, contact);
+            return CollisionHandler::haveCollided(this, (RectangleCollider*)collider, contact);
             break;
         default:
             break;

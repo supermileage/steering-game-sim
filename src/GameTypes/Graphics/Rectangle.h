@@ -12,6 +12,8 @@ class Rectangle : public GameObject {
 		void draw() override;
 		void clear() override;
 		bool move() override;
+		int32_t getWidth();
+		int32_t getHeight();
 
 	protected:
 		int32_t _x2;
