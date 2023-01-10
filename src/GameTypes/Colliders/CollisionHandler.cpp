@@ -73,8 +73,18 @@ bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* r
 }
 
 bool CollisionHandler::haveCollided(CircleCollider* circle1, CircleCollider* circle2, util::Point& contact) {
-    return util::computeDistance(circle1->getPosition(), circle2->getPosition()) <=
-        circle1->getRadius() + circle2->getRadius();
+    if (util::computeDistance(circle1->getPosition(), circle2->getPosition()) <=
+        circle1->getRadius() + circle2->getRadius()) {
+        util::Vec2 vec = util::Vec2 { static_cast<float>(circle2->getPosition().x - circle1->getPosition().x),
+            static_cast<float>(circle2->getPosition().y - circle1->getPosition().y) };
+        float magnitude = sqrt(pow(vec.x, 2) + pow(vec.y, 2));
+        vec.x = vec.x * (1 / magnitude) * static_cast<float>(circle1->getRadius());
+        vec.y = vec.y * (1 / magnitude) * static_cast<float>(circle1->getRadius());
+        contact.x = circle1->getPosition().x + round(vec.x);
+        contact.y = circle1->getPosition().y + round(vec.y);
+        return true;
+    }
+    return false;
 }
 
 bool CollisionHandler::haveCollided(RectangleCollider* rectangle1, RectangleCollider* rectangle2, util::Point& contact) {
