@@ -13,13 +13,13 @@ int32_t CircleCollider::getRadius() {
     return _radius;
 }
 
-bool CircleCollider::_hasCollidedWith(Collider* collider) {
+bool CircleCollider::_hasCollidedWith(Collider* collider, util::Point& contact) {
     switch (collider->getType()) {
         case Circle:
-            return CollisionHandler::haveCollided((CircleCollider*)collider, this);
+            return CollisionHandler::haveCollided((CircleCollider*)collider, this, contact);
             break;
         case Rectangle:
-            return CollisionHandler::haveCollided(this, (RectangleCollider*)collider);
+            return CollisionHandler::haveCollided(this, (RectangleCollider*)collider, contact);
             break;
         default:
             break;

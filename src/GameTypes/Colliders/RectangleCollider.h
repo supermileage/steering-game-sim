@@ -16,13 +16,14 @@ class RectangleCollider : public Collider {
         int32_t getWidth();
         void setHeight(int32_t height);
         int32_t getHeight();
+		util::Point getCenter() override;
         
     private:
         int32_t _width;
         int32_t _height;
         int32_t _farthestDistanceFromCenter;
 
-        bool _hasCollidedWith(Collider* collider) override;
+        bool _hasCollidedWith(Collider* collider, util::Point& contact) override;
 };
 
 #endif

@@ -31,7 +31,7 @@ class GameBase {
         virtual void cleanup() = 0;
         virtual void loop() = 0;
         virtual void handleJoystickChanged(Vec2 vec) = 0;
-        virtual void handleCollision(GameObject* obj1, GameObject* obj2) = 0;
+        virtual void handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) = 0;
         virtual void handleButtonPressed1() = 0;
         virtual void handleButtonReleased1() = 0;
         virtual void handleButtonPressed2() = 0;
@@ -47,7 +47,7 @@ class GameBase {
         ThreadedQueue<GameObject*> _renderQueue;
         
         void _handleCloseRequest();
-        void _handleCollision(GameObject::Collision collision);
+        void _handleCollision(Collider::Collision collision);
         void _runRenderQueue();
 };
 

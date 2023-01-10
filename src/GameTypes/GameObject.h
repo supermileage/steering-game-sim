@@ -18,13 +18,6 @@ using namespace util;
 // represents a game object with position, collider and rendering options
 class GameObject : public Shape {
     public:
-        struct Collision {
-            GameObject* obj1;
-            GameObject* obj2;
-
-            Collision(GameObject* g1, GameObject* g2) : obj1(g1), obj2(g2) { }
-        };
-
         GameObject(std::string name, bool enableCollision);
         virtual ~GameObject();
         const std::string& getName();

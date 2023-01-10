@@ -18,19 +18,27 @@ GameObject* Collider::getOwner() {
     return _owner;
 }
 
+void Collider::setOwner(GameObject* owner) {
+	_owner = owner;
+}
+
 Collider::ColliderType Collider::getType() {
     return _type;
 }
 
-bool Collider::hasCollidedWith(Collider* collider) {
+util::Point Collider::getCenter() {
+	return _owner->getPosition();
+}
+
+bool Collider::hasCollidedWith(Collider* collider, util::Point& contact) {
     if (_withinCollisionRange(collider)) {
-        return _hasCollidedWith(collider);
+        return _hasCollidedWith(collider, contact);
     }
     return false;
 }
 
 bool Collider::_withinCollisionRange(Collider* collider) {
-    return util::computeDistance(getPosition(), collider->getPosition()) <=
+    return util::computeDistance(getCenter(), collider->getCenter()) <=
         getFarthestCollisionDistance() + collider->getFarthestCollisionDistance();
 }
 

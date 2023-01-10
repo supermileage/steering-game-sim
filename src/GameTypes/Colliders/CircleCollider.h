@@ -19,7 +19,7 @@ class CircleCollider : public Collider {
     private:
         int32_t _radius;
 
-        bool _hasCollidedWith(Collider* collider) override;
+        bool _hasCollidedWith(Collider* collider, util::Point& contact) override;
 };
 
 #endif

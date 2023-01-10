@@ -13,7 +13,7 @@ GameBase::GameBase(SPI_TFT_ILI9341* tft, InputManager* inputManager) : _tft(tft)
     _inputManager->setJoystickChangedCallback(&GameBase::handleJoystickChanged);
     _inputManager->setCloseRequestCallback(&GameBase::_handleCloseRequest);
 
-    _collisionDelegate = new Delegate<GameBase, GameObject::Collision>(this, &GameBase::_handleCollision);
+    _collisionDelegate = new Delegate<GameBase, Collider::Collision>(this, &GameBase::_handleCollision);
     CollisionHandler::instance().registerCollisionDelegate(_collisionDelegate);
 }
 
@@ -83,8 +83,8 @@ void GameBase::_handleCloseRequest() {
     _run = false;
 }
 
-void GameBase::_handleCollision(GameObject::Collision collision) {
-    handleCollision(collision.obj1, collision.obj2);
+void GameBase::_handleCollision(Collider::Collision collision) {
+    handleCollision(collision.obj1, collision.obj2, collision.contact);
 }
 
 void GameBase::_runRenderQueue() {

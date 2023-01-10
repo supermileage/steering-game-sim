@@ -57,6 +57,10 @@ namespace util {
         float x;
         float y;
 
+		bool operator==(Vec2 vec) {
+            return x == vec.x && y == vec.y;
+        }
+
         bool operator!=(Vec2 vec) {
             return x != vec.x || y != vec.y;
         }
@@ -65,6 +69,14 @@ namespace util {
     struct Point {
         int32_t x;
         int32_t y;
+
+		bool operator==(Point p) {
+            return x == p.x && y == p.y;
+        }
+
+		bool operator!=(Point p) {
+            return x != p.x || y != p.y;
+        }
     };
 
     int32_t computeDistance(Point p1, Point p2);
