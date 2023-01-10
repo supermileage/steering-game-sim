@@ -113,11 +113,9 @@ bool CollisionHandler::haveCollided(RectangleCollider* rectangle1, RectangleColl
             if (topLeft2.y >= topLeft1.y && bottomRight2.y <= bottomRight1.y) {
                 contact.x = (topLeft2.x < topLeft1.x) ? topLeft1.x : bottomRight1.x;
                 contact.y = topLeft2.y;
-                return true;
             } else if (topLeft2.x >= topLeft1.x && bottomRight2.x <= bottomRight1.x) {
                 contact.x = topLeft2.x;
                 contact.y = (topLeft2.y < topLeft1.y) ? topLeft1.y : bottomRight1.y;
-                return true;
             } else {
                 if (topLeft2.x <= topLeft1.x) {
                     if (bottomRight2.y > bottomRight1.y) {
