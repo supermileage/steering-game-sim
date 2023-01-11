@@ -1,11 +1,11 @@
 #include "GameObject.h"
 #include <math.h>
 
-int GameObject::id = 0;
-std::vector<GameObject*> GameObject::_allGameObjects;
+int GameObject::id = 0; // PORTING: remove this line
+std::vector<GameObject*> GameObject::_allGameObjects; // PORTING: remove this line
 
 GameObject::GameObject(std::string name, bool enableCollisions) : _name(name), _enableCollisions(enableCollisions) {
-    _id = id++;
+    _id = id++; // PORTING: remove this line
     _allGameObjects.push_back(this); // PORTING: remove this line
 }
 
@@ -59,9 +59,9 @@ const std::string& GameObject::getName() {
     return _name;
 }
 
-bool GameObject::move() {
-    float deltaX = _speed * _direction.x + _lastDeltaX;
-    float deltaY = _speed * _direction.y + _lastDeltaY;
+bool GameObject::move(int64_t t) {
+    float deltaX = _speed * ((float)t / 1000) * _direction.x + _lastDeltaX;
+    float deltaY = _speed * ((float)t / 1000) * _direction.y + _lastDeltaY;
     float roundedX = round(deltaX);
     float roundedY = round(deltaY);
 
@@ -77,6 +77,7 @@ bool GameObject::move() {
 }
 
 /* Static methods */
+// PORTING: remove this method
 void GameObject::drawAll() {
     for (GameObject* graphic : _allGameObjects) {
         graphic->draw();

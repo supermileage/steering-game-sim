@@ -5,11 +5,11 @@
 #include "Circle.h"
 #include "Rectangle.h"
 
-#define BALL_SPEED 7
+#define BALL_SPEED 450
 #define BALL_RADIUS 15
 
 #define PADDLE_NAME "paddle"
-#define PADDLE_SPEED 15
+#define PADDLE_SPEED 450
 #define PADDLE_WIDTH 200
 #define PADDLE_HEIGHT 200
 #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
@@ -78,12 +78,12 @@ void Game::loop() {
             ball->getPosition().y + ball->getRadius() > _tft->height()) {
             ball->setDirection(Vec2 { ball->getDirection().x, -ball->getDirection().y });
         }
-        if (ball->move()) {
+        if (ball->move(_deltaT)) {
             draw(ball);
         }
     }
 
-    paddle->move();
+    paddle->move(_deltaT);
     draw(paddle);
 }
 

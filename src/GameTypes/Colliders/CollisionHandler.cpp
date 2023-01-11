@@ -21,8 +21,8 @@ void CollisionHandler::checkCollisions() {
     }
 
     const std::vector<Collider*>& allColliders = Collider::allColliders();
-    for (int i = 0; i < allColliders.size() - 1; i++) {
-        for (int j = i + 1; j < allColliders.size(); j++) {
+    for (uint32_t i = 0; i < allColliders.size() - 1; i++) {
+        for (uint32_t j = i + 1; j < allColliders.size(); j++) {
             _checkCollision(allColliders[i], allColliders[j]);
         }
 

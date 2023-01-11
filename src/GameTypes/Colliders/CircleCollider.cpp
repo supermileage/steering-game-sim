@@ -22,6 +22,7 @@ bool CircleCollider::_hasCollidedWith(Collider* collider, util::Point& contact) 
             return CollisionHandler::haveCollided(this, (RectangleCollider*)collider, contact);
             break;
         default:
+            return false;
             break;
     }
 }

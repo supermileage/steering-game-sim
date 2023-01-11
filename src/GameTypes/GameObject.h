@@ -30,12 +30,12 @@ class GameObject : public Shape {
         void setCollider(Collider* collider);
         Collider* getCollider();
         /* Returns true if position has been updated */
-		virtual bool move();
+		virtual bool move(int64_t t = 1000);
         static void drawAll(); // PORTING: remove this method and all references
 
     protected:
-        static int id;
-        int _id;
+        static int id;  // PORTING: remove this line
+        int _id;        // PORTING: remove this line
         Vec2 _direction = { 0, 0 };
         std::string _name;
 		int32_t _speed = 0;

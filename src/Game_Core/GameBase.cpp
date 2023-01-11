@@ -3,6 +3,8 @@
 
 using namespace std::chrono;
 
+GameBase* GameBase::_currentGame;
+
 GameBase::GameBase(SPI_TFT_ILI9341* tft, InputManager* inputManager) : _tft(tft), _inputManager(inputManager) {
     _timer = new Timer();
     _inputManager->setGame(this);
@@ -15,11 +17,14 @@ GameBase::GameBase(SPI_TFT_ILI9341* tft, InputManager* inputManager) : _tft(tft)
 
     _collisionDelegate = new Delegate<GameBase, Collider::Collision>(this, &GameBase::_handleCollision);
     CollisionHandler::instance().registerCollisionDelegate(_collisionDelegate);
+
+    _currentGame = this;
 }
 
 GameBase::~GameBase() {
     _run = false;
     _renderThread.join();
+    _currentGame = nullptr;
     delete _timer;
     delete _collisionDelegate;
 }
@@ -31,7 +36,7 @@ void GameBase::init() {
 
     setup();
 
-    _renderThread.start(&GameBase::_runRenderQueue, this);
+    // _renderThread.start(&GameBase::_runRenderQueue); // PORTING: uncomment this line
     
     GameObject::drawAll(); // PORTING: remove this in steering version (render queue will handle all rendering)
     _tft->display(); // PORTING: remove this in steering version (render queue will handle all rendering)
@@ -50,19 +55,19 @@ int GameBase::run() {
 
         // run 
         int64_t currentTime = millis();
-            if (currentTime > _lastFrameMillis + FRAME_RATE_MILLIS) {
-                _deltaT = currentTime - _lastFrameMillis;
-                
-                _tft->clear();  // PORTING: remove this in steering version (render queue will handle all rendering)
-                
-                CollisionHandler::instance().checkCollisions();
-                loop();
+        if (currentTime > _lastFrameMillis + FRAME_RATE_MILLIS) {
+            _deltaT = currentTime - _lastFrameMillis;
+            
+            _tft->clear();  // PORTING: remove this in steering version (render queue will handle all rendering)
+            
+            CollisionHandler::instance().checkCollisions();
+            loop();
 
-                GameObject::drawAll(); // PORTING: remove this in steering version (render queue will handle all rendering)
-                _tft->display(); // PORTING: remove this in steering version (render queue will handle all rendering)
+            GameObject::drawAll(); // PORTING: remove this in steering version (render queue will handle all rendering)
+            _tft->display(); // PORTING: remove this in steering version (render queue will handle all rendering)
 
-                _lastFrameMillis = currentTime;
-            }
+            _lastFrameMillis = currentTime;
+        }
     }
     return 1;
 }
@@ -76,7 +81,7 @@ int64_t GameBase::micros() {
 }
 
 void GameBase::draw(GameObject* graphic) {
-    _renderQueue.push(graphic);
+    // _renderQueue.push(graphic); // PORTING: uncomment this line
 }
 
 void GameBase::_handleCloseRequest() {
@@ -88,11 +93,11 @@ void GameBase::_handleCollision(Collider::Collision collision) {
 }
 
 void GameBase::_runRenderQueue() {
-    while (_run) {
-        while (!_renderQueue.empty()) {
-            _renderQueue.front()->clear();
-            _renderQueue.front()->draw();
-            _renderQueue.pop();
+    while (_currentGame->_run) {
+        while (!_currentGame->_renderQueue.empty()) {
+            _currentGame->_renderQueue.front()->clear();
+            _currentGame->_renderQueue.front()->draw();
+            _currentGame->_renderQueue.pop();
         }
     }
 }

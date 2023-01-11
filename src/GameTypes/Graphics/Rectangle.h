@@ -11,7 +11,7 @@ class Rectangle : public GameObject {
 		void init(SPI_TFT_ILI9341* tft, util::Point topLeft, int32_t width, int32_t height, int32_t colour, bool fill);
 		void draw() override;
 		void clear() override;
-		bool move() override;
+		bool move(int64_t t = 1000) override;
 		int32_t getWidth();
 		int32_t getHeight();
 

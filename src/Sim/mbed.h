@@ -17,6 +17,11 @@ class Thread {
             // _thread->detach();
         }
 
+        void start(void (*func)(void)) {
+            // _thread = new std::thread(method, object);
+            // _thread->detach();
+        }
+
         void join() {
             // _thread->join();
         }

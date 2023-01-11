@@ -35,9 +35,9 @@ void Rectangle::clear() {
 	// _tft->fillrect(_x, _y, _x2, _y2, _background);
 }
 
-bool Rectangle::move() {
-	float deltaX = _speed * _direction.x + _lastDeltaX;
-    float deltaY = _speed * _direction.y + _lastDeltaY;
+bool Rectangle::move(int64_t t) {
+	float deltaX = _speed * ((float)t / 1000) * _direction.x + _lastDeltaX;
+    float deltaY = _speed * ((float)t / 1000) * _direction.y + _lastDeltaY;
     float roundedX = round(deltaX);
     float roundedY = round(deltaY);
 

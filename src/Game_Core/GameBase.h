@@ -10,6 +10,8 @@
 #include "ThreadedQueue.h"
 #include "GameObject.h"
 
+#define FRAME_RATE_MILLIS 30
+
 class InputManager;
 
 class GameBase {
@@ -41,6 +43,7 @@ class GameBase {
         void draw(GameObject* graphic);
 
     private:
+        static GameBase* _currentGame;
         InputManager* _inputManager;
         Command* _collisionDelegate = nullptr;
         Thread _renderThread;
@@ -48,7 +51,7 @@ class GameBase {
         
         void _handleCloseRequest();
         void _handleCollision(Collider::Collision collision);
-        void _runRenderQueue();
+        static void _runRenderQueue();
 };
 
 #endif

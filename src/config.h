@@ -5,7 +5,6 @@
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800
-#define FRAME_RATE_MILLIS 10
 
 #define GAME_NAME "Pong"
 

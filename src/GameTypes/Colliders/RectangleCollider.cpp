@@ -39,6 +39,7 @@ bool RectangleCollider::_hasCollidedWith(Collider* collider, util::Point& contac
             return CollisionHandler::haveCollided(this, (RectangleCollider*)collider, contact);
             break;
         default:
+            return false;
             break;
     }
 }
