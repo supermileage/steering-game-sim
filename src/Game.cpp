@@ -10,16 +10,17 @@
 
 #define PADDLE_NAME "paddle"
 #define PADDLE_SPEED 15
-#define PADDLE_WIDTH 40
+#define PADDLE_WIDTH 200
 #define PADDLE_HEIGHT 200
 #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
-#define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_WIDTH / 2
-#define PADDLE_START util::Point { PADDLE_START_X, PADDLE_START_Y }
+#define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2
+#define PADDLE_START util::Point { WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 100 }
 
 /* Declare any global game objects here */
 Rectangle* paddle;
 Circle* ball1;
 Circle* ball2;
+Circle* ball3;
 std::vector<Circle*> balls;
 
 /* Game setup */
@@ -29,26 +30,32 @@ void Game::setup() {
     // to play your game on different-sized screens / windows)
 
     // example code:
-    // SPI_TFT_ILI9341* tft, int32_t xpos1, int32_t ypos1, int32_t colour, int32_t xpos2, int32_t ypos2, bool fill
     paddle = new Rectangle("paddle", true);
-    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, WhiteTFT, true);
+    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, PurpleTFT, true);
     paddle->setDirection(Vec2 { 0, 0 });
     paddle->setSpeed(PADDLE_SPEED);
     draw(paddle);
 
     ball1 = new Circle("ball1", true);
-    ball1->init(_tft, _tft->width() / 2, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
+    ball1->init(_tft, _tft->width() / 2 - 200, _tft->height() / 2, BlueTFT, BALL_RADIUS + 10, true);
     ball1->setDirection(Vec2 { -2.5, -1 });
-    ball1->setSpeed(BALL_SPEED);
+    ball1->setSpeed(BALL_SPEED - 5);
     balls.push_back(ball1);
     draw(ball1);
 
     ball2 = new Circle("ball2", true);
-    ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, WhiteTFT, BALL_RADIUS, true);
+    ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, YellowTFT, BALL_RADIUS, true);
     ball2->setDirection(Vec2 { 1, -1 });
-    ball2->setSpeed(BALL_SPEED);
+    ball2->setSpeed(BALL_SPEED + 3);
     balls.push_back(ball2);
     draw(ball2);
+
+    ball3 = new Circle("ball3", true);
+    ball3->init(_tft, BALL_RADIUS, _tft->height() - 200, GreenTFT, BALL_RADIUS + 20, true);
+    ball3->setDirection(Vec2 { -1, 1.5 });
+    ball3->setSpeed(BALL_SPEED + 2);
+    balls.push_back(ball3);
+    draw(ball3);
 }
 
 void Game::cleanup() {

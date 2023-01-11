@@ -49,27 +49,52 @@ bool CollisionHandler::haveCollided(CircleCollider* circle, RectangleCollider* r
     bottomRight.x = (corner1.x > corner2.x ? corner1.x : corner2.x);
     topLeft.y = (corner1.y < corner2.y ? corner1.y : corner2.y);
     bottomRight.y = (corner1.y > corner2.y ? corner1.y : corner2.y);
+    int32_t radius = circle->getRadius();
+    util::Point circlePos = circle->getPosition();
 
-    if (circle->getPosition().x >= topLeft.x - circle->getRadius() &&
-		circle->getPosition().x <= bottomRight.x + circle->getRadius()) {
+    if (util::valueWithinRangeInclusive(circlePos.x, topLeft.x - radius, bottomRight.x + radius) &&
+        util::valueWithinRangeInclusive(circlePos.y, topLeft.y, bottomRight.y)) {
         // side collision
-        if (circle->getPosition().y >= topLeft.y && circle->getPosition().y <= bottomRight.y) {
-            contact.x = (topLeft.x - circle->getPosition().x > 0) ? topLeft.x : bottomRight.x;
-            contact.y = circle->getPosition().y;
-			return true;
-		}
+        contact.x = (topLeft.x - circlePos.x > 0) ? topLeft.x : bottomRight.x;
+        contact.y = circlePos.y;
+        return true;
+    } else if (util::valueWithinRangeInclusive(circlePos.y, topLeft.y - radius, bottomRight.y + radius) &&
+        util::valueWithinRangeInclusive(circlePos.x, topLeft.x, bottomRight.x)) {
+        // top/bottom collision
+        contact.x = circlePos.x;
+        contact.y = (topLeft.y - circlePos.y > 0) ? topLeft.y : bottomRight.y;
+        return true;
     }
 
-    if (circle->getPosition().y >= topLeft.y - circle->getRadius() &&
-		circle->getPosition().y <= bottomRight.y + circle->getRadius()) {
-        // top/bottom collision
-        if (circle->getPosition().x >= topLeft.x && circle->getPosition().x <= bottomRight.x) {
-            contact.x = circle->getPosition().x;
-            contact.y = (topLeft.y - circle->getPosition().y > 0) ? topLeft.y : bottomRight.y;
-            return true;
+    bool ret = false;
+    // handle corner edge cases
+    if (circlePos.y < topLeft.y) {
+        // above
+        contact.y = topLeft.y;
+        if (circlePos.x < topLeft.x && util::computeDistance(circlePos, topLeft) <= radius) {
+            // left
+            contact.x = topLeft.x;
+            ret = true;
+        } else if (circlePos.x > bottomRight.x &&
+            util::computeDistance(circlePos, util::Point { bottomRight.x, topLeft.y }) <= radius) {
+            // right
+            contact.x = bottomRight.x;
+            ret = true;
+        }
+    } else if (circlePos.y > bottomRight.y) {
+        // below
+        contact.y = bottomRight.y;
+        if (circlePos.x < topLeft.x &&
+            util::computeDistance(circlePos, util::Point { topLeft.x, bottomRight.y }) <= radius) {
+            // left
+            contact.x = topLeft.x;
+            ret = true;
+        } else if (circlePos.x > bottomRight.x && util::computeDistance(circlePos, bottomRight) <= radius) {
+            contact.x = bottomRight.x;
+            ret = true;
         }
     }
-    return false;
+    return ret;
 }
 
 bool CollisionHandler::haveCollided(CircleCollider* circle1, CircleCollider* circle2, util::Point& contact) {

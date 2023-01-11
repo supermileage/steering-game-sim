@@ -38,6 +38,8 @@ bool Collider::hasCollidedWith(Collider* collider, util::Point& contact) {
 }
 
 bool Collider::_withinCollisionRange(Collider* collider) {
+    util::Point center1 = getCenter();
+    util::Point center2 = collider->getCenter();
     return util::computeDistance(getCenter(), collider->getCenter()) <=
         getFarthestCollisionDistance() + collider->getFarthestCollisionDistance();
 }

@@ -11,6 +11,19 @@ TEST_CASE("RectangleColliderTest", "[GameTypes][Collider]") {
 	MockGameObject obj;
 	RectangleCollider rectangle(&obj, RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
 	util::Point contact;
+	SECTION("RectangleCollider::getCenter test") {
+		rectangle.setWidth(5);
+		rectangle.setHeight(5);
+		obj.setPosition(util::Point{0,0});
+
+		REQUIRE( rectangle.getCenter().x == 2 );
+		REQUIRE( rectangle.getCenter().y == 2 );
+
+		rectangle.setWidth(20);
+		rectangle.setHeight(20);
+		REQUIRE( rectangle.getCenter().x == 10 );
+		REQUIRE( rectangle.getCenter().y == 10 );
+	}
 
 	SECTION("RectangleCollider::hasCollided with circle collider") {
 		MockGameObject circleObj;
@@ -65,7 +78,7 @@ TEST_CASE("RectangleColliderTest", "[GameTypes][Collider]") {
 			circleObj.setPosition(util::Point { 10, 19 });
 			REQUIRE_FALSE( rectangle.hasCollidedWith(&circle, contact) );
 
-			circleObj.setPosition(util::Point { 10, 41 });
+			circleObj.setPosition(util::Point { 10, 51 });
 			REQUIRE_FALSE( rectangle.hasCollidedWith(&circle, contact) );
 		}
 
@@ -172,7 +185,7 @@ TEST_CASE("RectangleColliderTest", "[GameTypes][Collider]") {
 			REQUIRE ( contact.y == 20 );
 
 			// test corner edge cases
-			circleObj.setPosition(util::Point { 19, 10 });
+			circleObj.setPosition(util::Point { 9, 10 });
 			REQUIRE_FALSE( rectangle.hasCollidedWith(&circle, contact) );
 
 			circleObj.setPosition(util::Point { 41, 10 });
@@ -224,7 +237,7 @@ TEST_CASE("RectangleColliderTest", "[GameTypes][Collider]") {
 			REQUIRE ( contact.y == 40 );
 
 			// test corner edge cases
-			circleObj.setPosition(util::Point { 19, 50 });
+			circleObj.setPosition(util::Point { 9, 50 });
 			REQUIRE_FALSE( rectangle.hasCollidedWith(&circle, contact) );
 
 			circleObj.setPosition(util::Point { 41, 50 });

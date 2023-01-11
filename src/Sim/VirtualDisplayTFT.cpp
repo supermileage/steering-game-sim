@@ -100,8 +100,7 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
     circle->setPosition(x, y);
     circle->setRadius(r);
     circle->setOutlineThickness(5);
-    circle->setOutlineColor(sf::Color::White);
-    circle->setFillColor(sf::Color::Black);
+    circle->setOutlineColor(VirtualDisplayTFT::convertColor(colour));
     _window->draw(*circle);
 }
 
@@ -109,7 +108,7 @@ void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
     sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
     circle->setPosition(x, y);
     circle->setRadius(r);
-    circle->setFillColor(sf::Color::White);
+    circle->setFillColor(VirtualDisplayTFT::convertColor(colour));
     _window->draw(*circle);
 }
 
@@ -123,8 +122,7 @@ void VirtualDisplayTFT::rect(int x1, int y1, int x2, int y2, int colour, int id)
     sizeVec->y = height;
     rectangle->setSize(*sizeVec);
     rectangle->setOutlineThickness(5);
-    rectangle->setOutlineColor(sf::Color::White);
-    rectangle->setOutlineColor(sf::Color::Black);
+    rectangle->setOutlineColor(VirtualDisplayTFT::convertColor(colour));
     _window->draw(*rectangle);
 }
 
@@ -137,7 +135,7 @@ void VirtualDisplayTFT::fillrect(int x1, int y1, int x2, int y2, int colour, int
     sizeVec->x = width;
     sizeVec->y = height;
     rectangle->setSize(*sizeVec);
-    rectangle->setFillColor(sf::Color::White);
+    rectangle->setFillColor(VirtualDisplayTFT::convertColor(colour));
     _window->draw(*rectangle);
 }
 
@@ -147,4 +145,11 @@ void VirtualDisplayTFT::clear() {
 
 void VirtualDisplayTFT::display() {
     _window->display();
+}
+
+sf::Color VirtualDisplayTFT::convertColor(int colour) {
+    uint8_t r = (uint8_t)(colour >> 11) * 8;
+    uint8_t g = ((uint8_t)(colour >> 5) & 0x3F) * 4;
+    uint8_t b = (uint8_t)(colour & 0x1F) * 8;
+    return sf::Color(r, g, b);
 }

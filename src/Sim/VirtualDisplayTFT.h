@@ -214,6 +214,8 @@ class VirtualDisplayTFT
 
         void display();
 
+        static sf::Color convertColor(int colour);
+
 
     private:
         unsigned char *font;
