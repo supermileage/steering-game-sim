@@ -6,7 +6,7 @@
 #define WINDOW_WIDTH 320
 #define WINDOW_HEIGHT 240
 
-#define GAME_NAME "Pong"
+#define GAME_NAME "Ball Herder"
 
 #define BUTTON_1 sf::Keyboard::Key::Space
 #define BUTTON_2 sf::Keyboard::Key::Z

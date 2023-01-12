@@ -8,7 +8,7 @@
 #define BALL_RADIUS 10
 
 #define PADDLE_NAME "paddle"
-#define PADDLE_SPEED 5
+#define PADDLE_SPEED 175
 #define PADDLE_WIDTH 50
 #define PADDLE_HEIGHT 50
 #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
@@ -87,7 +87,7 @@ void Game::loop() {
 
 /* Joystick changed event */
 void Game::handleJoystickChanged(Vec2 vec) {
-    paddle->setDirection(Vec2 { 0, vec.y } );
+    paddle->setDirection(Vec2 { vec.x, vec.y } );
 }
 
 /* Collision event -- params are game objects which have collided, contact is point of collision (on obj1) */
