@@ -8,7 +8,7 @@
 #include "Collider.h"
 #include "util.h"
 
-#define DECA 1000
+#define MILLI 1000
 
 class Collider;
 
@@ -31,7 +31,7 @@ class GameObject : public Shape {
         Point getPosition();
         void setCollider(Collider* collider);
         Collider* getCollider();
-        /* Returns true if position has been updated */
+        /* Pass in deltaT -- returns true if position has been updated */
 		virtual bool move(int64_t t = 1000);
         static void drawAll(); // PORTING: remove this method and all references
 

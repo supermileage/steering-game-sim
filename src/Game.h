@@ -3,7 +3,7 @@
 
 #include "GameBase.h"
 
-#define BORDER 3
+#define BORDER 1
 
 class Game : public GameBase {
     public:

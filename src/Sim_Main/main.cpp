@@ -8,6 +8,7 @@
 int main(int argc, char* argv[]) {
     sf::RenderWindow window;
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), GAME_NAME);
+    window.setSize(sf::Vector2u(WINDOW_WIDTH * 4, WINDOW_HEIGHT * 4));
 
     VirtualDisplayTFT tft(&window);
     InputManager inputManager(&window);

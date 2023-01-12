@@ -64,17 +64,17 @@ const std::string& GameObject::getName() {
 }
 
 bool GameObject::move(int64_t t) {
-    float deltaX = _speed * ((float)t / DECA) * _direction.x + _lastDeltaX;
-    float deltaY = _speed * ((float)t / DECA) * _direction.y + _lastDeltaY;
-    float floorX = floor(deltaX);
-    float floorY = floor(deltaY);
+    float deltaX = _speed * ((float)t / MILLI) * _direction.x + _lastDeltaX;
+    float deltaY = _speed * ((float)t / MILLI) * _direction.y + _lastDeltaY;
+    float roundedX = (deltaX >= 0) ? floor(deltaX) : ceil(deltaX);
+    float roundedY = (deltaY >= 0) ? floor(deltaY) : ceil(deltaY);
 
-    _lastDeltaX = (floorX == 0.0f ? deltaX : 0);
-    _lastDeltaY = (floorY == 0.0f ? deltaY : 0);
-    _x += floorX;
-    _y += floorY;
+    _lastDeltaX = (roundedX == 0.0f ? deltaX : 0);
+    _lastDeltaY = (roundedY == 0.0f ? deltaY : 0);
+    _x += roundedX;
+    _y += roundedY;
     
-    if (floorX != 0 || floorY != 0) {
+    if (roundedX != 0 || roundedY != 0) {
         return true;
     }
     return false;

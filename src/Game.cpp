@@ -4,7 +4,7 @@
 #include "Circle.h"
 #include "Rectangle.h"
 
-#define BALL_SPEED 1
+#define BALL_SPEED 100
 #define BALL_RADIUS 10
 
 #define PADDLE_NAME "paddle"
@@ -35,7 +35,7 @@ void Game::setup() {
 
     ball1 = new Circle("ball1", true);
     ball1->init(_tft, 60, WINDOW_HEIGHT - 50, GreenTFT, BALL_RADIUS, true);
-    ball1->setDirection(Vec2 { 1, 0 });
+    ball1->setDirection(Vec2 { -1.7, 1 });
     ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
     draw(ball1);
