@@ -10,7 +10,7 @@
 #include "ThreadedQueue.h"
 #include "GameObject.h"
 
-#define FRAME_RATE_MILLIS 30
+#define FRAME_RATE_MILLIS 100
 
 class InputManager;
 

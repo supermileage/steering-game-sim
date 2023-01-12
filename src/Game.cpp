@@ -1,32 +1,29 @@
 #include "Game.h"
-#include <iostream>
 
 /* Add includes for any graphics/bitmaps you want to use */
 #include "Circle.h"
 #include "Rectangle.h"
 
-#define BALL_SPEED 450
-#define BALL_RADIUS 15
+#define BALL_SPEED 3
+#define BALL_RADIUS 10
 
 #define PADDLE_NAME "paddle"
-#define PADDLE_SPEED 450
-#define PADDLE_WIDTH 200
-#define PADDLE_HEIGHT 200
+#define PADDLE_SPEED 5
+#define PADDLE_WIDTH 50
+#define PADDLE_HEIGHT 50
 #define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
 #define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2
-#define PADDLE_START util::Point { WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 100 }
+#define PADDLE_START util::Point { WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25 }
 
 /* Declare any global game objects here */
 Rectangle* paddle;
 Circle* ball1;
-Circle* ball2;
-Circle* ball3;
 std::vector<Circle*> balls;
 
 /* Game setup */
 void Game::setup() {
-    // Initialize any game objects with their start positions here.  Assume that _tft->width()
-    // and _tft->height() may vary, so try to avoid using hard-coded positions (ie. you should able
+    // Initialize any game objects with their start positions here.  Assume that WINDOW_WIDTH
+    // and WINDOW_HEIGHT may vary, so try to avoid using hard-coded positions (ie. you should able
     // to play your game on different-sized screens / windows)
 
     // example code:
@@ -37,25 +34,11 @@ void Game::setup() {
     draw(paddle);
 
     ball1 = new Circle("ball1", true);
-    ball1->init(_tft, _tft->width() / 2 - 200, _tft->height() / 2, BlueTFT, BALL_RADIUS + 10, true);
-    ball1->setDirection(Vec2 { -2.5, -1 });
-    ball1->setSpeed(BALL_SPEED - 5);
+    ball1->init(_tft, 60, WINDOW_HEIGHT - 50, GreenTFT, BALL_RADIUS, true);
+    ball1->setDirection(Vec2 { 1.7, -1 });
+    ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
     draw(ball1);
-
-    ball2 = new Circle("ball2", true);
-    ball2->init(_tft, _tft->width() - BALL_RADIUS, _tft->height() / 2, YellowTFT, BALL_RADIUS, true);
-    ball2->setDirection(Vec2 { 1, -1 });
-    ball2->setSpeed(BALL_SPEED + 3);
-    balls.push_back(ball2);
-    draw(ball2);
-
-    ball3 = new Circle("ball3", true);
-    ball3->init(_tft, BALL_RADIUS, _tft->height() - 200, GreenTFT, BALL_RADIUS + 20, true);
-    ball3->setDirection(Vec2 { -1, 1.5 });
-    ball3->setSpeed(BALL_SPEED + 2);
-    balls.push_back(ball3);
-    draw(ball3);
 }
 
 void Game::cleanup() {
@@ -70,21 +53,36 @@ void Game::cleanup() {
 void Game::loop() {
     // example
     for (Circle* ball : balls) {
-        if (ball->getPosition().x + ball->getRadius() < 0 || 
-            ball->getPosition().x + ball->getRadius() > _tft->width()) {
+        bool moved = ball->move();
+
+        if (ball->getPosition().x - ball->getRadius() < BORDER || 
+            ball->getPosition().x + ball->getRadius() > WINDOW_WIDTH - BORDER) {
+            // reposition ball so it is within bounds (avoids strange rendering glitchiness)
+            if (ball->getPosition().x + ball->getRadius() > WINDOW_WIDTH - BORDER ) {
+                ball->setPosition(util::Point { WINDOW_WIDTH - ball->getRadius() - BORDER, ball->getPosition().y });
+            } else {
+                ball->setPosition(util::Point { ball->getRadius() + BORDER, ball->getPosition().y });
+            }
             ball->setDirection(Vec2 { -ball->getDirection().x, ball->getDirection().y });
         }
-        if (ball->getPosition().y + ball->getRadius() < 0 ||
-            ball->getPosition().y + ball->getRadius() > _tft->height()) {
+        if (ball->getPosition().y - ball->getRadius() < BORDER ||
+            ball->getPosition().y + ball->getRadius() > WINDOW_HEIGHT - BORDER) {
+            // reposition ball so it is within bounds (avoids strange rendering glitchiness)
+            if (ball->getPosition().y + ball->getRadius() > WINDOW_HEIGHT - BORDER) {
+                ball->setPosition(util::Point {  ball->getPosition().x, WINDOW_HEIGHT - ball->getRadius() - BORDER });
+            } else {
+                ball->setPosition(util::Point { ball->getPosition().x, ball->getRadius() + BORDER });
+            }
             ball->setDirection(Vec2 { ball->getDirection().x, -ball->getDirection().y });
         }
-        if (ball->move(_deltaT)) {
+        if (moved) {
             draw(ball);
         }
     }
 
-    paddle->move(_deltaT);
-    draw(paddle);
+    if (paddle->move()) {
+        draw(paddle);
+    }
 }
 
 /* Joystick changed event */
@@ -94,12 +92,31 @@ void Game::handleJoystickChanged(Vec2 vec) {
 
 /* Collision event -- params are game objects which have collided, contact is point of collision (on obj1) */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) {
-    if (obj1->getName().compare(PADDLE_NAME) == 0) {
+    if (obj1->getName().compare(PADDLE_NAME) == 0 ) {
         if (contact.x == paddle->getPosition().x || contact.x == paddle->getPosition().x + paddle->getWidth()) {
             obj2->setDirection(Vec2 { -obj2->getDirection().x, obj2->getDirection().y });
+
+            // place obj2 outside of paddle to avoid collision loop
+            if (contact.x == paddle->getPosition().x) {
+                obj2->setPosition(util::Point { contact.x - obj2->getCollider()->getFarthestCollisionDistance(),
+                    obj2->getPosition().y });
+            } else {
+                obj2->setPosition(util::Point { contact.x + obj2->getCollider()->getFarthestCollisionDistance(),
+                    obj2->getPosition().y });
+            }
         } else {
             obj2->setDirection(Vec2 { obj2->getDirection().x, -obj2->getDirection().y });
+
+            // place obj2 outside of paddle to avoid collision loop
+            if (contact.y == paddle->getPosition().y) {
+                obj2->setPosition(util::Point { obj2->getPosition().x,
+                    contact.y - obj2->getCollider()->getFarthestCollisionDistance() });
+            } else {
+                obj2->setPosition(util::Point { obj2->getPosition().x,
+                    contact.y + obj2->getCollider()->getFarthestCollisionDistance() });
+            }
         }
+        draw(paddle);
         return;
     }
 

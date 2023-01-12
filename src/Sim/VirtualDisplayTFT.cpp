@@ -107,6 +107,7 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
 void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour, int id) {
     sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
     circle->setPosition(x, y);
+    circle->setOrigin(r, r);
     circle->setRadius(r);
     circle->setFillColor(VirtualDisplayTFT::convertColor(colour));
     _window->draw(*circle);

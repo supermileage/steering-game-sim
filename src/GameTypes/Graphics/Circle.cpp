@@ -19,15 +19,22 @@ void Circle::init(SPI_TFT_ILI9341* tft, int32_t xpos, int32_t ypos, int32_t colo
 
 // PORTING: Use original implementation in hardware
 void Circle::draw() {
+	_onDraw();
+
 	if (_fill)
 		_tft->fillcircle(_x, _y, _radius, _colour, _id);
 	else
 		_tft->circle(_x, _y, _radius, _colour, _id);
 }
 
-// PORTING: Use original implementation in hardware
+// PORTING: Use original implementation for hardware
 void Circle::clear() {
-	// deleted for sim
+	if (_rendered) {
+		int x = _lastRenderPosition.x;
+		int y = _lastRenderPosition.y;
+		// _tft->fillcircle(x, y, _radius, _background); // PORTING: uncomment this line
+		_rendered = false;
+	}
 }
 
 void Circle::setRadius(int32_t r) {

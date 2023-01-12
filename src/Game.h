@@ -3,6 +3,8 @@
 
 #include "GameBase.h"
 
+#define BORDER 3
+
 class Game : public GameBase {
     public:
         Game(SPI_TFT_ILI9341* tft, InputManager* inputManager) : GameBase(tft, inputManager) { }

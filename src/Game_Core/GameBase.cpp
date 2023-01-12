@@ -17,8 +17,7 @@ GameBase::GameBase(SPI_TFT_ILI9341* tft, InputManager* inputManager) : _tft(tft)
 
     _collisionDelegate = new Delegate<GameBase, Collider::Collision>(this, &GameBase::_handleCollision);
     CollisionHandler::instance().registerCollisionDelegate(_collisionDelegate);
-
-    _currentGame = this;
+    // _currentGame = this; // PORTING: uncomment this line
 }
 
 GameBase::~GameBase() {
@@ -93,6 +92,9 @@ void GameBase::_handleCollision(Collider::Collision collision) {
 }
 
 void GameBase::_runRenderQueue() {
+    if (!_currentGame) {
+		return;
+	}
     while (_currentGame->_run) {
         while (!_currentGame->_renderQueue.empty()) {
             _currentGame->_renderQueue.front()->clear();

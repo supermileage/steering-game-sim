@@ -55,6 +55,10 @@ void GameObject::setCollider(Collider* collider) {
     _collider = collider;
 }
 
+Collider* GameObject::getCollider() {
+    return _collider;
+}
+
 const std::string& GameObject::getName() {
     return _name;
 }
@@ -74,6 +78,12 @@ bool GameObject::move(int64_t t) {
         return true;
     }
     return false;
+}
+
+void GameObject::_onDraw() {
+    _lastRenderPosition.x = _x;
+    _lastRenderPosition.y = _y;
+    _rendered = true;
 }
 
 /* Static methods */
