@@ -8,6 +8,8 @@
 #include "Collider.h"
 #include "util.h"
 
+#define DECA 1000
+
 class Collider;
 
 using namespace util;

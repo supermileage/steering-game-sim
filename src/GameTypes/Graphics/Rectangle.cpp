@@ -41,19 +41,19 @@ void Rectangle::clear() {
 }
 
 bool Rectangle::move(int64_t t) {
-	float deltaX = _speed * ((float)t / 1000) * _direction.x + _lastDeltaX;
-    float deltaY = _speed * ((float)t / 1000) * _direction.y + _lastDeltaY;
-    float roundedX = round(deltaX);
-    float roundedY = round(deltaY);
+	float deltaX = _speed * ((float)t / DECA) * _direction.x + _lastDeltaX;
+    float deltaY = _speed * ((float)t / DECA) * _direction.y + _lastDeltaY;
+    float floorX = floor(deltaX);
+    float floorY = floor(deltaY);
 
-    _lastDeltaX = (roundedX == 0.0f ? deltaX : 0);
-    _lastDeltaY = (roundedY == 0.0f ? deltaY : 0);
-    _x += roundedX;
-    _y += roundedY;
-	_x2 += roundedX;
-    _y2 += roundedY;
+    _lastDeltaX = (floorX == 0.0f ? deltaX : 0);
+    _lastDeltaY = (floorY == 0.0f ? deltaY : 0);
+    _x += floorX;
+    _y += floorY;
+	_x2 += floorX;
+    _y2 += floorY;
     
-    if (roundedX != 0 || roundedY != 0) {
+    if (floorX != 0 || floorY != 0) {
         return true;
     }
     return false;
