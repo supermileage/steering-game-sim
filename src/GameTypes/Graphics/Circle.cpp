@@ -32,7 +32,13 @@ void Circle::clear() {
 	if (_rendered) {
 		int x = _lastRenderPosition.x;
 		int y = _lastRenderPosition.y;
-		// _tft->fillcircle(x, y, _radius, _background); // PORTING: uncomment this line
+
+		// PORTING: uncomment these lines
+		// if (_fill)
+		// 	_tft->fillcircle(x, y, _radius, _background);
+		// else
+		// 	_tft->circle(x, y, _radius, _background);
+
 		_rendered = false;
 	}
 }

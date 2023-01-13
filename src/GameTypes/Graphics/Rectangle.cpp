@@ -32,10 +32,16 @@ void Rectangle::draw() {
 
 // PORTING: Use original implementation in hardware
 void Rectangle::clear() {
-		if (_rendered) {
+	if (_rendered) {
 		int x = _lastRenderPosition.x;
 		int y = _lastRenderPosition.y;
-		// _tft->fillrect(x, y, x + _width, y + _height, _background); // PORTING: uncomment this line
+
+		// PORTING: uncomment these lines
+		// if (_fill)
+		// 	_tft->fillrect(x, y, x + _width, y + _height, _background); 
+		// else
+		// 	_tft->rect(x, y, x + _width, y + _height, _background); // PORTING: uncomment this line
+
 		_rendered = false;
 	}
 }

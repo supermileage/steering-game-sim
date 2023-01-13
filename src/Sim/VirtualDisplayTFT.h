@@ -194,28 +194,39 @@ class VirtualDisplayTFT
          */
         void set_orientation(unsigned int o);
         
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
         void registerShape(int id, VirtualDisplayTFT::GameObjectType type);
 
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
         void circle(int x, int y, int r, int colour, int id);
         
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
         void fillcircle(int x, int y, int r, int colour, int id);
 
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
         void rect(int x1, int y1, int x2, int y2, int colour, int id);
 
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
         void fillrect(int x1, int y1, int x2, int y2, int colour, int id);
 
-        /* Method below is not included in firmware TFT object -- do not use */
+        /* Not included with firmware TFT API -- do not call directly */
+        void Bitmap(unsigned int x, unsigned int y, unsigned int w, unsigned int h, unsigned char *bitmap, int id);
+
+        /* Not included with firmware TFT API -- do not call directly */
+        int printf(const std::string& str, int x, int y, unsigned char* font, int id);
+
+        /* Not included with firmware TFT API -- do not call directly */
         void clear();
 
         void display();
 
-        static sf::Color convertColor(int colour);
+        void setPixels(sf::Image& image, uint8_t* buf, int32_t w, int32_t h);
 
+        static sf::Color convertColor16(int colour);
+
+        static sf::Color convertColor8(int colour);
+
+        static uint16_t computeWidth(const std::string& str, unsigned char* font, uint16_t offset);
 
     private:
         unsigned char *font;
@@ -223,6 +234,9 @@ class VirtualDisplayTFT
         uint16_t _background;
         std::unordered_map<int, sf::Drawable*> _graphicsMap;
         std::unordered_map<int, sf::Vector2f*> _sizeMap;
+        std::unordered_map<int, sf::Image*> _imageMap;
+        std::unordered_map<int, sf::Texture*> _textureMap;
+        std::unordered_map<int, bool> _initializedMap;
 };
 
 #endif

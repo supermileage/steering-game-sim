@@ -3,6 +3,10 @@
 /* Add includes for any graphics/bitmaps you want to use */
 #include "Circle.h"
 #include "Rectangle.h"
+#include "Bitmap.h"
+#include "Text.h"
+#include "graphics.h"
+#include "Arial12x12.h"
 
 #define BALL_SPEED 100
 #define BALL_RADIUS 10
@@ -18,6 +22,8 @@
 /* Declare any global game objects here */
 Rectangle* paddle;
 Circle* ball1;
+Bitmap* bitmap;
+Text* text;
 std::vector<Circle*> balls;
 
 /* Game setup */
@@ -39,6 +45,15 @@ void Game::setup() {
     ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
     draw(ball1);
+
+    bitmap = new Bitmap("bitmap", true);
+    bitmap->init(_tft, 10, 10, SKULL_WIDTH, SKULL_HEIGHT, SkullGraphic);
+    draw(bitmap);
+
+    text = new Text("text");
+    text->init(_tft, 100, 10, Arial12x12, "ABCD");
+    text->setDisplayString("ABCD");
+    draw(text);
 }
 
 void Game::cleanup() {
