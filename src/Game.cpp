@@ -6,7 +6,7 @@
 #include "Bitmap.h"
 #include "Text.h"
 #include "graphics.h"
-#include "Arial12x12.h"
+#include "font_big.h"
 
 #define BALL_SPEED 100
 #define BALL_RADIUS 10
@@ -23,7 +23,8 @@
 Rectangle* paddle;
 Circle* ball1;
 Bitmap* bitmap;
-Text* text;
+Text* text1;
+Text* text2;
 std::vector<Circle*> balls;
 
 /* Game setup */
@@ -46,14 +47,17 @@ void Game::setup() {
     balls.push_back(ball1);
     draw(ball1);
 
-    bitmap = new Bitmap("bitmap", true);
-    bitmap->init(_tft, 10, 10, SKULL_WIDTH, SKULL_HEIGHT, SkullGraphic);
+    bitmap = new Bitmap("bitmap", false);
+    bitmap->init(_tft, WINDOW_WIDTH / 2 - SKULL_WIDTH / 2, WINDOW_HEIGHT / 2 - SKULL_HEIGHT / 2, SKULL_WIDTH, SKULL_HEIGHT, SkullGraphic);
     draw(bitmap);
 
-    text = new Text("text");
-    text->init(_tft, 100, 10, Arial12x12, "ABCD");
-    text->setDisplayString("ABCD");
-    draw(text);
+    text1 = new Text("text");
+    text1->init(_tft, 100, 10, Neu42x35, "BALL");
+    draw(text1);
+
+    text2 = new Text("text");
+    text2->init(_tft, 75, 45, Neu42x35, "HERDER");
+    draw(text2);
 }
 
 void Game::cleanup() {

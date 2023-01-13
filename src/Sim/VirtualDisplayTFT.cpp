@@ -47,12 +47,7 @@ void VirtualDisplayTFT::circle(int x, int y, int r, int colour) {
 }
 
 void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour) {
-    // sf::CircleShape testCircle;
-    // testCircle.setRadius(r);
-    // testCircle.setPosition(x, y);
-    // testCircle.setFillColor(sf::Color::White);
-    // _window->draw(testCircle);
-    // _window->display();
+
 }
 
 void VirtualDisplayTFT::line(int x0, int y0, int x1, int y1, int colour) {
@@ -183,8 +178,6 @@ int VirtualDisplayTFT::printf(const std::string& str, int x, int y, unsigned cha
     
     uint16_t cur_x = 0;
     for (int i = 0; i < str.size(); i++) {
-        std::cout << "rendering: " << str[i] << std::endl;
-
         uint8_t cur = (uint8_t)str[i] - 32;
         uint16_t cur_columns = (uint8_t)font[cur * offset];
         uint8_t* cur_buf = (uint8_t*)(font + cur * offset + 1);
@@ -199,9 +192,10 @@ int VirtualDisplayTFT::printf(const std::string& str, int x, int y, unsigned cha
                     if (y1 >= h) {
                         break;
                     }
-                    if ((b >> (8 - k - 1)) & 0x1) {
-                        std::cout << "drawing pixel at: { " << cur_x + x1 << ", " << h - y1 << " }" << std::endl;
-                        image.setPixel(cur_x + x1, h - y1, sf::Color::White);
+                    if ((b >> k) & 0x1) {
+                        image.setPixel(cur_x + x1, y1, sf::Color::White);
+                    } else {
+                        image.setPixel(cur_x + x1, y1, sf::Color::Transparent);
                     }
                 }
             }
