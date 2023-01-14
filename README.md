@@ -49,7 +49,7 @@ There is an example game project on example_game branch which you can check out 
 ## Important!
 There are some discrepancies between how the game will look and perform in the game sim vs urban steering itself:
 
-Urban steering has to run the game on a microcontroller which is powerful, but relatively powerful wimpy compared to the CPU/GPU combo which you will no doubt run the game sim on.  If you are going to make a game, you can include fairly sophisticated logic, but you CANNOT render more than 2 objects per frame without significantly lowering the framerate of the game.  This means that complex physics-based games are not really possible, unless they are about as simple as Pong.
+Urban steering has to run the game on a microcontroller which is powerful, but relatively wimpy compared to the CPU/GPU combo on which you will be developing your game.  You can include fairly sophisticated logic in your game, but you CANNOT render more than 2 objects per frame without significantly lowering the framerate of the game.  This means that complex physics-based games are not really possible, unless they are about as simple as Pong.
 
 Also, because of the way the ILI9341 renders objects, overlapping objects will delete eachother's pixels.  This will not be apparent in the game sim.  I will include some example pictures here eventually to show what this looks like.  Best practice for your game would be to avoid any significantly overlapping shapes.
 
