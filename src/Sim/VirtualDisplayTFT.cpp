@@ -209,7 +209,7 @@ void VirtualDisplayTFT::display() {
 void VirtualDisplayTFT::bitmapToImage(sf::Image& image, uint8_t* buf, int32_t w, int32_t h) {
     for (int32_t y = 0; y < h; y++) {
         for (int32_t x = 0; x < w; x++) {
-            image.setPixel(x, y, convertColor16(*(uint16_t*)(buf + x * 2 + y * w * 2)));
+            image.setPixel(x, y, convertColor16(*(uint16_t*)(buf + x * 2 + (h - y - 1) * w * 2)));
         }
     }
 }
