@@ -3,6 +3,8 @@
 
 #include "VirtualDisplayTFT.h"
 
+#define OUTLINE_THICKNESS 1
+
 VirtualDisplayTFT::VirtualDisplayTFT(sf::RenderWindow* window) : _window(window) { }
 
 VirtualDisplayTFT::~VirtualDisplayTFT() {
@@ -81,8 +83,10 @@ int VirtualDisplayTFT::_putc(int value) {
 void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
     sf::CircleShape* circle = (sf::CircleShape*)_graphicsMap[id];
     circle->setPosition(x, y);
+    circle->setOrigin(r, r);
     circle->setRadius(r);
-    circle->setOutlineThickness(5);
+    circle->setOutlineThickness(OUTLINE_THICKNESS);
+    circle->setFillColor(VirtualDisplayTFT::convertColor16(_background));
     circle->setOutlineColor(VirtualDisplayTFT::convertColor16(colour));
     _window->draw(*circle);
 }
@@ -105,7 +109,8 @@ void VirtualDisplayTFT::rect(int x1, int y1, int x2, int y2, int colour, int id)
     sizeVec->x = width;
     sizeVec->y = height;
     rectangle->setSize(*sizeVec);
-    rectangle->setOutlineThickness(5);
+    rectangle->setOutlineThickness(OUTLINE_THICKNESS);
+    rectangle->setFillColor(VirtualDisplayTFT::convertColor16(_background));
     rectangle->setOutlineColor(VirtualDisplayTFT::convertColor16(colour));
     _window->draw(*rectangle);
 }

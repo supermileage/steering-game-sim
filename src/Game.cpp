@@ -40,7 +40,7 @@ void Game::setup() {
      * Simple rectangle object
     */
     paddle = new Rectangle("paddle", true);
-    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, PurpleTFT, true);
+    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, PurpleTFT, false);
     paddle->setDirection(Vec2 { 0, 0 });
     paddle->setSpeed(PADDLE_SPEED);
     draw(paddle);
@@ -49,7 +49,7 @@ void Game::setup() {
      * Simple circle object
     */
     ball1 = new Circle("ball1", true);
-    ball1->init(_tft, 60, WINDOW_HEIGHT - 50, GreenTFT, BALL_RADIUS, true);
+    ball1->init(_tft, 60, WINDOW_HEIGHT - 50, GreenTFT, BALL_RADIUS, false);
     ball1->setDirection(Vec2 { -1.9, 1 });
     ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
