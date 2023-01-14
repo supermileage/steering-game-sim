@@ -74,11 +74,11 @@ void Game::setup() {
      * 
      **/
     text1 = new Text("example_text1");
-    text1->init(_tft, 50, 10, (unsigned char*)Neu42x35, "EXAMPLE");
+    text1->init(_tft, 55, 10, (unsigned char*)Neu42x35, "STEERING");
     draw(text1);
 
     text2 = new Text("example_text2");
-    text2->init(_tft, 85, 40, (unsigned char*)Neu42x35, "GAME");
+    text2->init(_tft, 121, 40, (unsigned char*)Neu42x35, "SIM");
     draw(text2);
 }
 
