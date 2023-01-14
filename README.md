@@ -1,6 +1,6 @@
 # Urban Steering Game Simulator
 
-<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example_PC.png" width="500">
+<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example.png" width="500">
 
 Simulator to develop games which will run on urban steering wheel screen
 
