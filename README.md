@@ -33,7 +33,7 @@ And a function which will be called if two game objects collide:
 ```C++
 // handle collision event, where obj1 and obj2 are the game objects which have collided
 // contact is the x,y point at which they have collided
-void handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) override;
+void handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact);
 ```
 
 There is much more documentation in the comments of src/Game.cpp!
