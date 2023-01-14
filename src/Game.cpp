@@ -13,11 +13,11 @@
 
 #define PADDLE_NAME "paddle"
 #define PADDLE_SPEED 175
-#define PADDLE_WIDTH 50
-#define PADDLE_HEIGHT 50
-#define PADDLE_START_X WINDOW_WIDTH - PADDLE_WIDTH * 2
+#define PADDLE_WIDTH 65
+#define PADDLE_HEIGHT 65
+#define PADDLE_START_X WINDOW_WIDTH / 2 - PADDLE_WIDTH / 2
 #define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2
-#define PADDLE_START util::Point { WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25 }
+#define PADDLE_START util::Point { PADDLE_START_X, PADDLE_START_Y }
 
 /* Declare any global game objects here */
 Rectangle* paddle;
@@ -35,28 +35,28 @@ void Game::setup() {
 
     // example code:
     paddle = new Rectangle("paddle", true);
-    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, PurpleTFT, true);
+    paddle->init(_tft, PADDLE_START, PADDLE_WIDTH, PADDLE_HEIGHT, BlackTFT, true);
     paddle->setDirection(Vec2 { 0, 0 });
     paddle->setSpeed(PADDLE_SPEED);
     draw(paddle);
 
     ball1 = new Circle("ball1", true);
     ball1->init(_tft, 60, WINDOW_HEIGHT - 50, GreenTFT, BALL_RADIUS, true);
-    ball1->setDirection(Vec2 { -1.7, 1 });
+    ball1->setDirection(Vec2 { -1.9, 1 });
     ball1->setSpeed(BALL_SPEED);
     balls.push_back(ball1);
     draw(ball1);
 
     bitmap = new Bitmap("bitmap", false);
-    bitmap->init(_tft, WINDOW_WIDTH / 2 - SKULL_WIDTH / 2, WINDOW_HEIGHT / 2 - SKULL_HEIGHT / 2, SKULL_WIDTH, SKULL_HEIGHT, SkullGraphic);
+    bitmap->init(_tft, WINDOW_WIDTH / 2 - SKULL_WIDTH / 2, WINDOW_HEIGHT / 2 - SKULL_HEIGHT / 2, SKULL_WIDTH, SKULL_HEIGHT, (unsigned char*)SkullGraphic);
     draw(bitmap);
 
     text1 = new Text("text");
-    text1->init(_tft, 100, 10, Neu42x35, "BALL");
+    text1->init(_tft, 100, 10, (unsigned char*)Neu42x35, "BALL");
     draw(text1);
 
     text2 = new Text("text");
-    text2->init(_tft, 75, 45, Neu42x35, "HERDER");
+    text2->init(_tft, 75, 45, (unsigned char*)Neu42x35, "HERDER");
     draw(text2);
 }
 
@@ -65,7 +65,11 @@ void Game::cleanup() {
     for (Circle* ball : balls) {
         delete ball;
     }
+    
     balls.clear();
+    delete bitmap;
+    delete text1;
+    delete text2;
 }
 
 /* Game loop */
@@ -74,6 +78,7 @@ void Game::loop() {
     for (Circle* ball : balls) {
         bool moved = ball->move(_deltaT);
 
+        // Check if each ball is in bounds on X, modify direction vector if it is near edge
         if (ball->getPosition().x - ball->getRadius() < BORDER || 
             ball->getPosition().x + ball->getRadius() > WINDOW_WIDTH - BORDER) {
             // reposition ball so it is within bounds (avoids strange rendering glitchiness)
@@ -84,6 +89,8 @@ void Game::loop() {
             }
             ball->setDirection(Vec2 { -ball->getDirection().x, ball->getDirection().y });
         }
+
+        // Check if each ball is in bounds on X, modify direction vector if it is near edge
         if (ball->getPosition().y - ball->getRadius() < BORDER ||
             ball->getPosition().y + ball->getRadius() > WINDOW_HEIGHT - BORDER) {
             // reposition ball so it is within bounds (avoids strange rendering glitchiness)
@@ -99,18 +106,16 @@ void Game::loop() {
         }
     }
 
+    // move paddle by deltaT
+    // (will only move paddle if its direction vector has been set in handle joystick method below)
     if (paddle->move(_deltaT)) {
         draw(paddle);
     }
 }
 
-/* Joystick changed event */
-void Game::handleJoystickChanged(Vec2 vec) {
-    paddle->setDirection(Vec2 { vec.x, vec.y } );
-}
-
 /* Collision event -- params are game objects which have collided, contact is point of collision (on obj1) */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) {
+    // check if obj1 is paddle
     if (obj1->getName().compare(PADDLE_NAME) == 0 ) {
         if (contact.x == paddle->getPosition().x || contact.x == paddle->getPosition().x + paddle->getWidth()) {
             obj2->setDirection(Vec2 { -obj2->getDirection().x, obj2->getDirection().y });
@@ -139,10 +144,20 @@ void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& cont
         return;
     }
 
+    // all other objects will simply bounce off of eachother
     Vec2 vec1 = obj1->getDirection();
     Vec2 vec2 = obj2->getDirection();
     obj1->setDirection(Vec2 { vec2.x, vec2.y });
     obj2->setDirection(Vec2 { vec1.x, vec1.y });
+}
+
+//////////////////////////////////////////////////
+// Input Handlers (keys in sim, actual joystick and steering buttons on Urban steering)
+// - see config.h to see or reassign game buttons to different keys
+
+/* Joystick changed event */
+void Game::handleJoystickChanged(Vec2 vec) {
+    paddle->setDirection(Vec2 { vec.x, vec.y } );
 }
 
 /* Button 1 pressed event */

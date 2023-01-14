@@ -5,6 +5,21 @@
 
 VirtualDisplayTFT::VirtualDisplayTFT(sf::RenderWindow* window) : _window(window) { }
 
+VirtualDisplayTFT::~VirtualDisplayTFT() {
+    for (auto const& pair : _graphicsMap) {
+        delete pair.second;
+    }
+    for (auto const& pair : _sizeMap) {
+        delete pair.second;
+    }
+    for (auto const& pair : _textureMap) {
+        delete pair.second;
+    }
+    for (auto const& pair : _imageMap) {
+        delete pair.second;
+    }
+}
+
 int VirtualDisplayTFT::width() {
     return (int)_window->getSize().x;
 }
@@ -38,33 +53,18 @@ void VirtualDisplayTFT::registerShape(int id, VirtualDisplayTFT::GameObjectType 
     }
 }
 
-void VirtualDisplayTFT::pixel(int x, int y, int colour) {
-
-}
-
-void VirtualDisplayTFT::circle(int x, int y, int r, int colour) {
-
-}
-
-void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour) {
-
-}
-
-void VirtualDisplayTFT::line(int x0, int y0, int x1, int y1, int colour) {
-
-}
-
-void VirtualDisplayTFT::rect(int x0, int y0, int x1, int y1, int colour) {
-
-}
-
-void VirtualDisplayTFT::fillrect(int x0, int y0, int x1, int y1, int colour) {
-
-}
-
-void VirtualDisplayTFT::locate(int x, int y) {
-
-}
+// Not implemented in virtual tft class
+void VirtualDisplayTFT::pixel(int x, int y, int colour) { }
+void VirtualDisplayTFT::circle(int x, int y, int r, int colour) { }
+void VirtualDisplayTFT::fillcircle(int x, int y, int r, int colour) { }
+void VirtualDisplayTFT::line(int x0, int y0, int x1, int y1, int colour) { }
+void VirtualDisplayTFT::rect(int x0, int y0, int x1, int y1, int colour) { }
+void VirtualDisplayTFT::fillrect(int x0, int y0, int x1, int y1, int colour) { }
+void VirtualDisplayTFT::locate(int x, int y) { }
+void VirtualDisplayTFT::Bitmap(unsigned int x, unsigned int y, unsigned int w, unsigned int h, unsigned char *bitmap) { }
+void VirtualDisplayTFT::set_font(unsigned char *f) { }
+int VirtualDisplayTFT::printf(const char *format, ...) { return 0; }
+void VirtualDisplayTFT::set_orientation(unsigned int o) { }
 
 void VirtualDisplayTFT::background(uint16_t colour) {
     _background = colour;
@@ -76,26 +76,6 @@ void VirtualDisplayTFT::cls(void) {
 
 int VirtualDisplayTFT::_putc(int value) {
     return 0;
-}
-
-void VirtualDisplayTFT::character(int x, int y, int c) {
-
-}
-
-void VirtualDisplayTFT::Bitmap(unsigned int x, unsigned int y, unsigned int w, unsigned int h, unsigned char *bitmap) {
-
-}
-
-void VirtualDisplayTFT::set_font(unsigned char *f) {
-
-}
-
-int VirtualDisplayTFT::printf(const char *format, ...) {
-    return 0;
-}
-
-void VirtualDisplayTFT::set_orientation(unsigned int o) {
-
 }
 
 void VirtualDisplayTFT::circle(int x, int y, int r, int colour, int id) {
@@ -149,7 +129,7 @@ void VirtualDisplayTFT::Bitmap(unsigned int x, unsigned int y, unsigned int w, u
     if (!_initializedMap[id]) {
         sf::Image&  image = *_imageMap[id];
         image.create(w, h, sf::Color::Black);
-        setPixels(image, bitmap, w, h);
+        bitmapToImage(image, bitmap, w, h);
         sf::Texture& texture = *_textureMap[id];
         bool success = texture.loadFromImage(image);
 
@@ -177,15 +157,15 @@ int VirtualDisplayTFT::printf(const std::string& str, int x, int y, unsigned cha
     image.create(w, h);
     
     uint16_t cur_x = 0;
-    for (int i = 0; i < str.size(); i++) {
+    for (int i = 0; i < str.size();i++) {
         uint8_t cur = (uint8_t)str[i] - 32;
         uint16_t cur_columns = (uint8_t)font[cur * offset];
-        uint8_t* cur_buf = (uint8_t*)(font + cur * offset + 1);
+        uint8_t* cur_bitmap = (uint8_t*)(font + cur * offset + 1);
 
         for (uint16_t x1 = 0; x1 < cur_columns; x1++) {
             // draw a column of pixels
             for (int16_t j = 0; j < bytesPerColumn; j++) {
-                uint8_t b = cur_buf[x1 * bytesPerColumn + j];
+                uint8_t b = cur_bitmap[x1 * bytesPerColumn + j];
 
                 for (uint16_t k = 0; k < 8; k++) {
                     uint8_t y1 = j * 8 + k;
@@ -226,10 +206,10 @@ void VirtualDisplayTFT::display() {
     _window->display();
 }
 
-void VirtualDisplayTFT::setPixels(sf::Image& image, uint8_t* buf, int32_t w, int32_t h) {
+void VirtualDisplayTFT::bitmapToImage(sf::Image& image, uint8_t* buf, int32_t w, int32_t h) {
     for (int32_t y = 0; y < h; y++) {
         for (int32_t x = 0; x < w; x++) {
-            image.setPixel(x, y, convertColor8(buf[x + y * w]));
+            image.setPixel(x, y, convertColor16(*(uint16_t*)(buf + x * 2 + y * w * 2)));
         }
     }
 }

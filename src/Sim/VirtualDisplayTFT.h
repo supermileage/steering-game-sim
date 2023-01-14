@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <unordered_map>
-
 #include "SFML/Graphics.hpp"
 
 #define RGB(r, g, b) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3)) // 5 red | 6 green | 5 blue
@@ -28,29 +27,8 @@
 #define OrangeTFT 0xFD20      /* 255, 165,   0 */
 #define GreenYellowTFT 0xAFE5 /* 173, 255,  47 */
 
-/** Display control class which implements graphics-related methods for mbed's SPI_TFT
- *
- * Example:
- *
- * #include <string>
- * #include "VirtualDisplayTFT.h"
- * #include "Arial12x12.h"
- * #include "Arial24x23.h"
- *
- * int main() {
- *     VirtualDisplayTFT TFT(200, 200); 
- *     TFT.background(BlackTFT);    // set background to black
- *     TFT.foreground(White);    // set chars to white
- *     TFT.cls();                // clear the window
- *     TFT.set_font((unsigned char*) Arial12x12);  // select the font
- *
- *     TFT.set_orientation(0);
- *     printf("  Hello World 0");
- *     TFT.set_font((unsigned char*) Arial24x23);  // select font 2
- *     TFT.locate(75,100);
- *     TFT.printf("Bigger Font");
- *  }
-
+/** 
+ *  Virtual display control class which implements graphics-related methods for mbed's SPI_TFT
  */
 class VirtualDisplayTFT
 {
@@ -59,140 +37,45 @@ class VirtualDisplayTFT
         enum GameObjectType { Circle, Rectangle, BitmapData, Text };
 
         VirtualDisplayTFT(sf::RenderWindow* window);
+        ~VirtualDisplayTFT();
 
         /** Get the width of the window in pixel
          *
          * @returns width of window in pixel
-         *
          */
         int width();
 
         /** Get the height of the window in pixel
-         *
+         * 
          * @returns height of window in pixel
-         *
          */
         int height();
 
-        /** Draw a pixel at x,y with color
-         *
-         * @param x horizontal position
-         * @param y vertical position
-         * @param color 16 bit pixel color
-         */
+        //////////////////////////////////////////////
+        // Not implemented in game sim
         void pixel(int x, int y, int colour);
-
-        /** draw a circle
-         *
-         * @param x0,y0 center
-         * @param r radius
-         * @param color 16 bit color                                                                 *
-         *
-         */
         void circle(int x, int y, int r, int colour);
-
-        /** draw a filled circle
-         *
-         * @param x0,y0 center
-         * @param r radius
-         * @param color 16 bit color                                                                 *
-         */
         void fillcircle(int x, int y, int r, int colour);
-
-        /** draw a 1 pixel line
-         *
-         * @param x0,y0 start point
-         * @param x1,y1 stop point
-         * @param color 16 bit color
-         *
-         */
         void line(int x0, int y0, int x1, int y1, int colour);
-
-        /** draw a rect
-         *
-         * @param x0,y0 top left corner
-         * @param x1,y1 down right corner
-         * @param color 16 bit color
-         *                                                   *
-         */
         void rect(int x0, int y0, int x1, int y1, int colour);
-
-        /** draw a filled rect
-         *
-         * @param x0,y0 top left corner
-         * @param x1,y1 down right corner
-         * @param color 16 bit color
-         *
-         */
         void fillrect(int x0, int y0, int x1, int y1, int colour);
-
-        /** setup cursor position
-         *
-         * @param x x-position (top left)
-         * @param y y-position
-         */
         void locate(int x, int y);
-
-        void background(uint16_t colour);
+        int printf(const char *format, ...);
+        void set_orientation(unsigned int o);
+        int _putc(int value);
+        void Bitmap(unsigned int x, unsigned int y, unsigned int w, unsigned int h, unsigned char *bitmap);
+        void set_font(unsigned char *f);
+        //////////////////////////////////////////////
 
         /** Fill the window with _background color
          *
          */
         void cls(void);
-
-        /** put a char on the window
-         *
-         * @param value char to print
-         * @returns printed char
-         *
-         */
-        int _putc(int value);
-
-        /** draw a character on given position out of the active font to the TFT
-         *
-         * @param x x-position of char (top left)
-         * @param y y-position
-         * @param c char to print
-         *
-         */
-        virtual void character(int x, int y, int c);
-
-        /** paint a bitmap on the TFT
-         *
-         * @param x,y : upper left corner
-         * @param w width of bitmap
-         * @param h high of bitmap
-         * @param *bitmap pointer to the bitmap data
-         */
-        void Bitmap(unsigned int x, unsigned int y, unsigned int w, unsigned int h, unsigned char *bitmap);
-
-        /** select the font to use
-         *
-         * @param f pointer to font array
-         *
-         *   font array can created with GLCD Font Creator from http://www.mikroe.com
-         *   you have to add 4 parameter at the beginning of the font array to use:
-         *   - the number of byte / char
-         *   - the vertial size in pixel
-         *   - the horizontal size in pixel
-         *   - the number of byte per vertical line
-         *   you also have to change the array to char[]
-         *
-         */
-        void set_font(unsigned char *f);
-
-        /*
-         * Prints character to window
+        
+        /**
+         * Set background colour of window
         */
-        int printf(const char *format, ...);
-
-        /** Set the orientation of the window
-         *  x,y: 0,0 is always top left
-         *
-         * @param o direction to use the window (0-3)
-         *
-         */
-        void set_orientation(unsigned int o);
+        void background(uint16_t colour);
         
         /* Not included with firmware TFT API -- do not call directly */
         void registerShape(int id, VirtualDisplayTFT::GameObjectType type);
@@ -218,9 +101,10 @@ class VirtualDisplayTFT
         /* Not included with firmware TFT API -- do not call directly */
         void clear();
 
+        /* Not included with firmware TFT API -- do not call directly */
         void display();
 
-        void setPixels(sf::Image& image, uint8_t* buf, int32_t w, int32_t h);
+        void bitmapToImage(sf::Image& image, uint8_t* buf, int32_t w, int32_t h);
 
         static sf::Color convertColor16(int colour);
 
