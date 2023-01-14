@@ -108,8 +108,6 @@ class VirtualDisplayTFT
 
         static sf::Color convertColor16(int colour);
 
-        static sf::Color convertColor8(int colour);
-
         static uint16_t computeWidth(const std::string& str, unsigned char* font, uint16_t offset);
 
     private:

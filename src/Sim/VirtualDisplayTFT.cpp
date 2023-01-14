@@ -221,13 +221,6 @@ sf::Color VirtualDisplayTFT::convertColor16(int colour) {
     return sf::Color(r, g, b);
 }
 
-sf::Color VirtualDisplayTFT::convertColor8(int colour) {
-    uint8_t r = (uint8_t)(colour >> 5) * 32;
-    uint8_t g = ((uint8_t)(colour >> 2) & 0x7) * 32;
-    uint8_t b = (uint8_t)(colour & 0x3) * 64;
-    return sf::Color(r, g, b);
-}
-
 uint16_t VirtualDisplayTFT::computeWidth(const std::string& str, unsigned char* font, uint16_t offset) {
     uint16_t ret = 0;
     for (uint16_t i = 0; i < str.size(); i++) {

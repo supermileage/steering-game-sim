@@ -10,7 +10,8 @@
 #include "ThreadedQueue.h"
 #include "GameObject.h"
 
-#define FRAME_RATE_MILLIS 10
+/* Game frame rate: Urban steering is capable of maybe 10 - 15fps */
+#define FRAME_RATE_MILLIS 16
 
 class InputManager;
 
