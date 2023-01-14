@@ -1,4 +1,7 @@
 # Urban Steering Game Simulator
+
+<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example_PC.png" width="500">
+
 Simulator to develop games which will run on urban steering wheel screen
 
 ## API
@@ -37,13 +40,11 @@ There is much more documentation in the comments of src/Game.cpp!
 
 ## Examples
 
-There is an example game project in another branch which you can check out to get an idea of how to use the API.  Here is what it looks like:
+There is an example game project on example_game branch which you can check out to get an idea of how to use the API (sim rendering pictured above).  
 
-### Example on Simulator:
-<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example_PC.png" width="500">
+### Here is what it looks like on urban steering:
 
-### Example on Urban Steering:
-<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example_Steering.jpg" width="500">
+<img src="https://github.com/supermileage/steering-game-sim/blob/main/media/Example_Steering.jpg" width="450">
 
 ## Important!
 There are some discrepancies between how the game will look and perform in the game sim vs urban steering itself:
