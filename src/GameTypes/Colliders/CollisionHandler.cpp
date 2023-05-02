@@ -1,5 +1,7 @@
 #include "CollisionHandler.h"
 
+#include <math.h>
+
 CollisionHandler* CollisionHandler::_instance = nullptr;
 
 CollisionHandler::CollisionHandler() { }

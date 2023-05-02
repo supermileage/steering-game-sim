@@ -9,24 +9,12 @@
 #include "font_big.h"
 
 /* Macros */
-#define BALL_SPEED 100
 #define BALL_RADIUS 10
-
-#define PADDLE_NAME "paddle"
-#define PADDLE_SPEED 175
-#define PADDLE_WIDTH 65
-#define PADDLE_HEIGHT 65
-#define PADDLE_START_X WINDOW_WIDTH / 2 - PADDLE_WIDTH / 2
-#define PADDLE_START_Y WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2
-#define PADDLE_START util::Point { PADDLE_START_X, PADDLE_START_Y }
+#define BALL_SPEED 40
+#define SPEED_CHANGE 10
 
 /* Declare any game objects here */
-Rectangle* paddle;
-Circle* ball1;
-Bitmap* bitmap;
-Text* text1;
-Text* text2;
-std::vector<Circle*> balls;
+Circle* ball; // example
 
 /** Game setup
  * 
@@ -88,17 +76,8 @@ void Game::setup() {
  * (call delete on all objects instantiated with 'new')
  * 
  **/
-
 void Game::cleanup() {
-    delete paddle;
-    for (Circle* ball : balls) {
-        delete ball;
-    }
-    
-    balls.clear();
-    delete bitmap;
-    delete text1;
-    delete text2;
+    delete ball;
 }
 
 /** Core Game loop
@@ -107,42 +86,10 @@ void Game::cleanup() {
  * 
  **/
 void Game::loop() {
-    // example
-    for (Circle* ball : balls) {
-        bool moved = ball->move(_deltaT);
-
-        // Check if each ball is in bounds on X, modify direction vector if it is near edge
-        if (ball->getPosition().x - ball->getRadius() < BORDER || 
-            ball->getPosition().x + ball->getRadius() > WINDOW_WIDTH - BORDER) {
-            // reposition ball so it is within bounds (avoids strange rendering glitchiness)
-            if (ball->getPosition().x + ball->getRadius() > WINDOW_WIDTH - BORDER ) {
-                ball->setPosition(util::Point { WINDOW_WIDTH - ball->getRadius() - BORDER, ball->getPosition().y });
-            } else {
-                ball->setPosition(util::Point { ball->getRadius() + BORDER, ball->getPosition().y });
-            }
-            ball->setDirection(Vec2 { -ball->getDirection().x, ball->getDirection().y });
-        }
-
-        // Check if each ball is in bounds on X, modify direction vector if it is near edge
-        if (ball->getPosition().y - ball->getRadius() < BORDER ||
-            ball->getPosition().y + ball->getRadius() > WINDOW_HEIGHT - BORDER) {
-            // reposition ball so it is within bounds (avoids strange rendering glitchiness)
-            if (ball->getPosition().y + ball->getRadius() > WINDOW_HEIGHT - BORDER) {
-                ball->setPosition(util::Point {  ball->getPosition().x, WINDOW_HEIGHT - ball->getRadius() - BORDER });
-            } else {
-                ball->setPosition(util::Point { ball->getPosition().x, ball->getRadius() + BORDER });
-            }
-            ball->setDirection(Vec2 { ball->getDirection().x, -ball->getDirection().y });
-        }
-        if (moved) {
-            draw(ball);
-        }
-    }
-
-    // move paddle by deltaT
-    // (will only move paddle if its direction vector has been set in handle joystick method below)
-    if (paddle->move(_deltaT)) {
-        draw(paddle);
+    // try moving the ball -- _deltaT is the time since last frame
+    if (ball->move(_deltaT)) {
+        // draw ball if it has been moved
+        draw(ball);
     }
 }
 
@@ -156,40 +103,7 @@ void Game::loop() {
  * 
  */
 void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& contact) {
-    // check if obj1 is paddle
-    if (obj1->getName().compare(PADDLE_NAME) == 0 ) {
-        if (contact.x == paddle->getPosition().x || contact.x == paddle->getPosition().x + paddle->getWidth()) {
-            obj2->setDirection(Vec2 { -obj2->getDirection().x, obj2->getDirection().y });
-
-            // place obj2 outside of paddle to avoid collision loop
-            if (contact.x == paddle->getPosition().x) {
-                obj2->setPosition(util::Point { contact.x - obj2->getCollider()->getFarthestCollisionDistance(),
-                    obj2->getPosition().y });
-            } else {
-                obj2->setPosition(util::Point { contact.x + obj2->getCollider()->getFarthestCollisionDistance(),
-                    obj2->getPosition().y });
-            }
-        } else {
-            obj2->setDirection(Vec2 { obj2->getDirection().x, -obj2->getDirection().y });
-
-            // place obj2 outside of paddle to avoid collision loop
-            if (contact.y == paddle->getPosition().y) {
-                obj2->setPosition(util::Point { obj2->getPosition().x,
-                    contact.y - obj2->getCollider()->getFarthestCollisionDistance() });
-            } else {
-                obj2->setPosition(util::Point { obj2->getPosition().x,
-                    contact.y + obj2->getCollider()->getFarthestCollisionDistance() });
-            }
-        }
-        draw(paddle);
-        return;
-    }
-
-    // all other objects will simply bounce off of eachother
-    Vec2 vec1 = obj1->getDirection();
-    Vec2 vec2 = obj2->getDirection();
-    obj1->setDirection(Vec2 { vec2.x, vec2.y });
-    obj2->setDirection(Vec2 { vec1.x, vec1.y });
+    
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -205,14 +119,14 @@ void Game::handleCollision(GameObject* obj1, GameObject* obj2, util::Point& cont
  * 
  **/
 void Game::handleJoystickChanged(Vec2 vec) {
-    paddle->setDirection(Vec2 { vec.x, vec.y } );
+    // change direction of ball based on input
+    ball->setDirection(vec);
 }
-
-
 
 /* Button 1 pressed event */
 void Game::handleButtonPressed1() {
-    
+    // increase ball speed by pressing button 1
+    ball->setSpeed(ball->getSpeed() + SPEED_CHANGE);
 }
 
 /* Button 1 released event */
@@ -222,7 +136,8 @@ void Game::handleButtonReleased1() {
 
 /* Button 2 pressed event */
 void Game::handleButtonPressed2() {
-    
+    // decrease ball speed by pressing button 2
+    ball->setSpeed(ball->getSpeed() - SPEED_CHANGE);
 }
 
 /* Button 2 released event */

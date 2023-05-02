@@ -11,8 +11,10 @@ CATCH_DIR = lib/Catch2/single_include/catch2
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 
 SRC_DIRS := $(SRC_DIR)/
+SRC_DIRS += $(sort $(dir $(wildcard $(SRC_DIR)/*/)))
 SRC_DIRS += $(sort $(dir $(wildcard $(SRC_DIR)/*/*/)))
 SRC_DIRS_TEST := $(TEST_DIR)/ $(CATCH_DIR)/
+SRC_DIRS_TEST += $(sort $(dir $(wildcard $(TEST_DIR)/*/)))
 SRC_DIRS_TEST += $(sort $(dir $(wildcard $(TEST_DIR)/*/*/)))
 SRC_DIRS_TEST += $(filter-out $(MAIN_DIR)/,$(SRC_DIRS))
 
