@@ -18,8 +18,6 @@ SRC_DIRS_TEST += $(sort $(dir $(wildcard $(TEST_DIR)/*/)))
 SRC_DIRS_TEST += $(sort $(dir $(wildcard $(TEST_DIR)/*/*/)))
 SRC_DIRS_TEST += $(filter-out $(MAIN_DIR)/,$(SRC_DIRS))
 
-$(info SRC_DIRS is $(SRC_DIRS))
-
 CPPSRC := $(foreach %,$(SRC_DIRS),$(wildcard $(%)*.cpp))
 CPPSRC_TEST := $(foreach %,$(SRC_DIRS_TEST),$(wildcard $(%)*.cpp))
 OBJ := $(foreach %,$(CPPSRC:.cpp=.o),$(BUILD_DIR)/$(%))
@@ -30,8 +28,6 @@ INCLUDE_PREFIX = -I
 INCLUDE_FLAGS := $(foreach %, $(SRC_DIRS), $(INCLUDE_PREFIX)$(%))
 INCLUDE_FLAGS_TEST := $(foreach %, $(SRC_DIRS_TEST), $(INCLUDE_PREFIX)$(%))
 INCLUDE_FLAGS := $(sort $(INCLUDE_FLAGS) $(INCLUDE_FLAGS_TEST))
-
-$(info INCLUDE_FLAGS is $(INCLUDE_FLAGS))
 
 $(DEP_DIR)/%.d:
 	@mkdir -p $(@D)
